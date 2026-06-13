@@ -303,6 +303,47 @@
                         <option value="Monthly Contract">Monthly Contract</option>
                     </select>
                 </div>
+                <!-- Car Details Section (Brand, Model & Transmission) -->
+<div class="form-group">
+    <label>Car Brand</label>
+    <i class="fa-solid fa-copyright"></i>
+    <select id="carBrand" onchange="updateCarModels()" required>
+        <option value="">-- Select Car Brand --</option>
+        <option value="Maruti Suzuki">Maruti Suzuki</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Tata Motors">Tata Motors</option>
+        <option value="Mahindra">Mahindra</option>
+        <option value="Kia">Kia</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Honda">Honda</option>
+        <option value="Skoda">Skoda</option>
+        <option value="Volkswagen">Volkswagen</option>
+        <option value="MG Motors">MG Motors</option>
+        <option value="Renault">Renault</option>
+        <option value="Nissan">Nissan</option>
+        <option value="Mercedes-Benz">Mercedes-Benz</option>
+        <option value="BMW">BMW</option>
+        <option value="Audi">Audi</option>
+        <option value="Jaguar / Land Rover">Jaguar / Land Rover</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Car Model</label>
+    <i class="fa-solid fa-car-side"></i>
+    <select id="carModel" required>
+        <option value="">-- First Select Brand --</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Transmission Type</label>
+    <i class="fa-solid fa-gears"></i>
+    <select id="transmission" required>
+        <option value="Manual (Stick Shift)">Manual (MT)</option>
+        <option value="Automatic (AMT/CVT/DCT)">Automatic (AT)</option>
+    </select>
+</div>
 
                 <button type="submit" class="btn-submit">
                     <i class="fa-brands fa-whatsapp"></i> Confirm & Book Driver
@@ -316,36 +357,82 @@
     </footer>
 
     <script>
-        document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Page refresh hone se rokne ke liye
+      // Indian Market Car Database (Brands & Models)
+const carDatabase = {
+    "Maruti Suzuki": ["Alto K10", "S-Presso", "Celerio", "WagonR", "Swift", "Dzire", "Epic Swift", "Baleno", "Fronx", "Breza", "Grand Vitara", "Ertiga", "XL6", "Jimny", "Ciaz", "Eeco"],
+    "Hyundai": ["i10 Nios", "i20", "i20 N-Line", "Exter", "Aura", "Venue", "Creta", "Creta N-Line", "Alcazar", "Tucson", "Verna", "Ioniq 5"],
+    "Tata Motors": ["Tiago", "Tigor", "Altroz", "Punch", "Nexon", "Harrier", "Safari", "Curvv", "Sierra", "Tiago EV", "Punch EV", "Nexon EV"],
+    "Mahindra": ["XUV 3XO", "XUV400", "XUV700", "Scorpio-N", "Scorpio Classic", "Thar", "Thar Roxx (5-Door)", "Bolero", "Bolero Neo", "XUV900"],
+    "Kia": ["Sonet", "Seltos", "Carens", "Carnival", "EV6", "EV9"],
+    "Toyota": ["Glanza", "Taisor", "Rumion", "Urban Cruiser Hyryder", "Innova Crysta", "Innova Hycross", "Fortuner", "Fortuner Legender", "Hilux", "Camry", "Vellfire"],
+    "Honda": ["Amaze", "City (5th Gen)", "City Hybrid", "Elevate"],
+    "Skoda": ["Slavia", "Kushaq", "Kodiaq", "Superb"],
+    "Volkswagen": ["Virtus", "Taigun", "Tiguan"],
+    "MG Motors": ["Comet EV", "Astor", "Hector", "Hector Plus", "ZS EV", "Gloster"],
+    "Renault": ["Kwid", "Triber", "Kiger"],
+    "Nissan": ["Magnite", "X-Trail"],
+    "Mercedes-Benz": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Wagon", "AMG Series", "EQE / EQS EV"],
+    "BMW": ["1 Series", "2 Series Gran Coupe", "3 Series GL", "5 Series", "7 Series", "X1", "X3", "X5", "X7", "Z4", "iX EV", "M Series"],
+    "Audi": ["A4", "A6", "A8 L", "Q3", "Q3 Sportback", "Q5", "Q7", "Q8", "e-tron GT"],
+    "Jaguar / Land Rover": ["Jaguar XF", "Jaguar F-Pace", "Range Rover Evoque", "Range Rover Velar", "Range Rover Sport", "Vogue", "Defender", "Discovery", "Discovery Sport"]
+};
 
-            // Saari fields ki value uthana
-            const name = document.getElementById('custName').value;
-            const phone = document.getElementById('custPhone').value;
-            const pickup = document.getElementById('pickupLoc').value;
-            const date = document.getElementById('bookDate').value;
-            const time = document.getElementById('bookTime').value;
-            const service = document.getElementById('serviceType').value;
+// Function: Jab Brand select hoga, toh uske models dropdown me load honge
+function updateCarModels() {
+    const brandSelect = document.getElementById('carBrand');
+    const modelSelect = document.getElementById('carModel');
+    const selectedBrand = brandSelect.value;
 
-            // Tumhara Diya hua Manager WhatsApp Number
-            const managerWhatsAppNumber = "919420184273"; 
+    // Pehle se padi options ko clear karein
+    modelSelect.innerHTML = '<option value="">-- Select Car Model --</option>';
 
-            // Ekdum professional corporate message template block
-            const message = `🚨 *NEW DRIVER BOOKING RECEIVED* 🚨%0A%0A` +
-                            `👤 *Customer Name:* ${encodeURIComponent(name)}%0A` +
-                            `📞 *Contact Number:* ${encodeURIComponent(phone)}%0A` +
-                            `📍 *Pickup Location:* ${encodeURIComponent(pickup)}%0A` +
-                            `📅 *Date:* ${encodeURIComponent(date)}%0A` +
-                            `⏰ *Time:* ${encodeURIComponent(time)}%0A` +
-                            `🚗 *Service Type:* ${encodeURIComponent(service)}%0A%0A` +
-                            `⚡ _Please assign a driver immediately!_`;
-
-            // WhatsApp Web/App ke link pe dynamically bhejna
-            const whatsappUrl = `https://wa.me/${managerWhatsAppNumber}?text=${message}`;
-
-            // Naye tab me open karna taaki website bhi khuli rahe aur message bhi chala jaye
-            window.open(whatsappUrl, '_blank');
+    if (selectedBrand && carDatabase[selectedBrand]) {
+        carDatabase[selectedBrand].forEach(function(model) {
+            let option = document.createElement('option');
+            option.value = model;
+            option.textContent = model;
+            modelSelect.appendChild(option);
         });
+    }
+}
+
+// Form Submit Handling (WhatsApp Directing)
+document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    // Base user details
+    const name = document.getElementById('custName').value;
+    const phone = document.getElementById('custPhone').value;
+    const pickup = document.getElementById('pickupLoc').value;
+    const date = document.getElementById('bookDate').value;
+    const time = document.getElementById('bookTime').value;
+    const service = document.getElementById('serviceType').value;
+
+    // Newly Added Car Details
+    const carBrand = document.getElementById('carBrand').value;
+    const carModel = document.getElementById('carModel').value;
+    const transmission = document.getElementById('transmission').value;
+
+    // Manager Number
+    const managerWhatsAppNumber = "919420184273"; 
+
+    // Upgraded Premium Corporate Message Template
+    const message = `🚨 *NEW PREMIUM DRIVER BOOKING* 🚨%0A%0A` +
+                    `👤 *Customer Name:* ${encodeURIComponent(name)}%0A` +
+                    `📞 *Contact Number:* ${encodeURIComponent(phone)}%0A` +
+                    `📍 *Pickup Location:* ${encodeURIComponent(pickup)}%0A` +
+                    `📅 *Date:* ${encodeURIComponent(date)}%0A` +
+                    `⏰ *Time:* ${encodeURIComponent(time)}%0A` +
+                    `🚗 *Service Type:* ${encodeURIComponent(service)}%0A%0A` +
+                    `⚙️ *VEHICLE DETAILS:*%0A` +
+                    `🔹 *Brand:* ${encodeURIComponent(carBrand)}%0A` +
+                    `🔹 *Model:* ${encodeURIComponent(carModel)}%0A` +
+                    `🕹️ *Transmission:* ${encodeURIComponent(transmission)}%0A%0A` +
+                    `⚡ _Please assign an experienced driver immediately!_`;
+
+    const whatsappUrl = `https://wa.me/${managerWhatsAppNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+});
     </script>
 </body>
 </html>
