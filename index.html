@@ -224,6 +224,68 @@
             .hero-text h1 { font-size: 2.5rem; }
             .nav-links { display: none; } /* Mobile me burger menu bad me add ho sakta hai */
         }
+        /* ---- DRIVER PROFILES & REVIEWS STYLING ---- */
+.reviews-section {
+    padding: 80px 5%;
+    background: #13131a;
+    text-align: center;
+}
+.reviews-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 40px;
+}
+.reviews-section h2 span { color: var(--primary-gold); }
+.drivers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+.driver-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(255, 183, 3, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    transition: 0.3s;
+}
+.driver-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); }
+.driver-img {
+    width: 80px; height: 80px;
+    background: #252533;
+    border-radius: 50%;
+    margin: 0 auto 15px auto;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: var(--primary-gold);
+}
+.rating-stars { color: var(--primary-gold); margin: 10px 0; }
+
+/* ---- SECRET ADMIN DASHBOARD STYLING ---- */
+.admin-trigger-zone {
+    padding: 20px; text-align: center; background: #0a0a0d;
+}
+.btn-admin-login {
+    background: transparent; color: var(--text-gray); border: 1px dashed rgba(255,255,255,0.2);
+    padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;
+}
+.btn-admin-login:hover { color: var(--primary-gold); border-color: var(--primary-gold); }
+.admin-dashboard {
+    display: none; padding: 60px 5%; background: #0f0f12; border-top: 3px solid var(--primary-gold);
+}
+.admin-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
+}
+.admin-table-wrapper { overflow-x: auto; }
+.admin-table {
+    width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden;
+}
+.admin-table th, .admin-table td {
+    padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.admin-table th { background: #252533; color: var(--primary-gold); }
+.admin-table tr:hover { background: rgba(255,183,3,0.02); }
+.btn-danger {
+    background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;
+}
+.btn-danger:hover { background: #dc2626; }
     </style>
 </head>
 <body>
@@ -353,41 +415,96 @@
             </form>
         </div>
     </section>
+<!-- 1. DRIVER PROFILES & REVIEWS SECTION (Publicly Visible) -->
+    <section class="reviews-section">
+        <h2>Our <span>Top Rated</span> Drivers</h2>
+        <div class="drivers-grid">
+            <!-- Driver 1 -->
+            <div class="driver-card">
+                <div class="driver-img"><i class="fa-solid fa-user-tie"></i></div>
+                <h3>Ramesh Kumar</h3>
+                <p style="color: var(--primary-gold); font-size: 0.85rem;">Exp: 8+ Years (Manual/Automatic)</p>
+                <div class="rating-stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">"Very punctual. Safely drove my Mercedes from South Mumbai to Thane in heavy rain."</p>
+                <span style="font-size: 0.8rem; display:block; margin-top:10px; color:#6b7280;">- Mukesh A. (CEO)</span>
+            </div>
+            
+            <!-- Driver 2 -->
+            <div class="driver-card">
+                <div class="driver-img"><i class="fa-solid fa-user-tie"></i></div>
+                <h3>Sandeep Shinde</h3>
+                <p style="color: var(--primary-gold); font-size: 0.85rem;">Exp: 5+ Years (Luxury Cars Expert)</p>
+                <div class="rating-stars">
+                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star-half-stroke"></i>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-gray);">"Best option for night parties. Professional behavior and perfect route knowledge."</p>
+                <span style="font-size: 0.8rem; display:block; margin-top:10px; color:#6b7280;">- Rohan S.</span>
+            </div>
+        </div>
+    </section>
 
+    <!-- SECRET LOGIN BUTTON AREA (Footer ke thik upar chota sa hidden trigger) -->
+    <div class="admin-trigger-zone">
+        <button class="btn-admin-login" onclick="accessAdminPanel()"><i class="fa-solid fa-lock"></i> Staff Login</button>
+    </div>
+
+    <!-- 2. SECRET ADMIN DASHBOARD (Hidden by Default) -->
+    <section class="admin-dashboard" id="adminPanel">
+        <div class="admin-header">
+            <h2><i class="fa-solid fa-gauge"></i> Live Booking <span>Database</span></h2>
+            <button class="btn-submit" style="width:auto; margin:0; padding:10px 20px; background:#ef4444; color:#fff;" onclick="logoutAdmin()">Logout</button>
+        </div>
+        
+        <div class="admin-table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Contact</th>
+                        <th>Pickup</th>
+                        <th>Date & Time</th>
+                        <th>Vehicle Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="adminTableBody">
+                    <!-- Data Javascript ke through yahan automatic load hogi -->
+                </tbody>
+            </table>
+        </div>
+    </section>
     <footer>
         <p>&copy; 2026 Anyway Anywhere Anytime Driver Services Mumbai. All Rights Reserved.</p>
     </footer>
 
     <script>
-      // Indian Market Car Database (Brands & Models)
+ // Indian Market Car Database
 const carDatabase = {
     "Maruti Suzuki": ["Alto K10", "S-Presso", "Celerio", "WagonR", "Swift", "Dzire", "Epic Swift", "Baleno", "Fronx", "Breza", "Grand Vitara", "Ertiga", "XL6", "Jimny", "Ciaz", "Eeco"],
     "Hyundai": ["i10 Nios", "i20", "i20 N-Line", "Exter", "Aura", "Venue", "Creta", "Creta N-Line", "Alcazar", "Tucson", "Verna", "Ioniq 5"],
     "Tata Motors": ["Tiago", "Tigor", "Altroz", "Punch", "Nexon", "Harrier", "Safari", "Curvv", "Sierra", "Tiago EV", "Punch EV", "Nexon EV"],
-    "Mahindra": ["XUV 3XO", "XUV400", "XUV700", "Scorpio-N", "Scorpio Classic", "Thar", "Thar Roxx (5-Door)", "Bolero", "Bolero Neo", "XUV900"],
-    "Kia": ["Sonet", "Seltos", "Carens", "Carnival", "EV6", "EV9"],
-    "Toyota": ["Glanza", "Taisor", "Rumion", "Urban Cruiser Hyryder", "Innova Crysta", "Innova Hycross", "Fortuner", "Fortuner Legender", "Hilux", "Camry", "Vellfire"],
-    "Honda": ["Amaze", "City (5th Gen)", "City Hybrid", "Elevate"],
-    "Skoda": ["Slavia", "Kushaq", "Kodiaq", "Superb"],
+    "Mahindra": ["XUV 3XO", "XUV400", "XUV700", "Scorpio-N", "Scorpio Classic", "Thar", "Thar Roxx (5-Door)", "Bolero", "Bolero Neo"],
+    "Kia": ["Sonet", "Seltos", "Carens", "Carnival", "EV6"],
+    "Toyota": ["Glanza", "Taisor", "Rumion", "Urban Cruiser Hyryder", "Innova Crysta", "Innova Hycross", "Fortuner", "Hilux", "Camry"],
+    "Honda": ["Amaze", "City (5th Gen)", "Elevate"],
+    "Skoda": ["Slavia", "Kushaq", "Kodiaq"],
     "Volkswagen": ["Virtus", "Taigun", "Tiguan"],
-    "MG Motors": ["Comet EV", "Astor", "Hector", "Hector Plus", "ZS EV", "Gloster"],
+    "MG Motors": ["Comet EV", "Astor", "Hector", "ZS EV", "Gloster"],
     "Renault": ["Kwid", "Triber", "Kiger"],
     "Nissan": ["Magnite", "X-Trail"],
-    "Mercedes-Benz": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Wagon", "AMG Series", "EQE / EQS EV"],
-    "BMW": ["1 Series", "2 Series Gran Coupe", "3 Series GL", "5 Series", "7 Series", "X1", "X3", "X5", "X7", "Z4", "iX EV", "M Series"],
-    "Audi": ["A4", "A6", "A8 L", "Q3", "Q3 Sportback", "Q5", "Q7", "Q8", "e-tron GT"],
-    "Jaguar / Land Rover": ["Jaguar XF", "Jaguar F-Pace", "Range Rover Evoque", "Range Rover Velar", "Range Rover Sport", "Vogue", "Defender", "Discovery", "Discovery Sport"]
+    "Mercedes-Benz": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLC", "GLE", "GLS", "G-Wagon", "AMG Series"],
+    "BMW": ["2 Series", "3 Series GL", "5 Series", "7 Series", "X1", "X3", "X5", "X7", "Z4", "iX EV", "M Series"],
+    "Audi": ["A4", "A6", "A8 L", "Q3", "Q5", "Q7", "Q8"],
+    "Jaguar / Land Rover": ["Jaguar XF", "Jaguar F-Pace", "Range Rover Evoque", "Range Rover Velar", "Range Rover Sport", "Defender", "Discovery"]
 };
 
-// Function: Jab Brand select hoga, toh uske models dropdown me load honge
 function updateCarModels() {
     const brandSelect = document.getElementById('carBrand');
     const modelSelect = document.getElementById('carModel');
     const selectedBrand = brandSelect.value;
-
-    // Pehle se padi options ko clear karein
     modelSelect.innerHTML = '<option value="">-- Select Car Model --</option>';
-
     if (selectedBrand && carDatabase[selectedBrand]) {
         carDatabase[selectedBrand].forEach(function(model) {
             let option = document.createElement('option');
@@ -398,43 +515,99 @@ function updateCarModels() {
     }
 }
 
-// Form Submit Handling (WhatsApp Directing)
+// FORM SUBMISSION AND STORAGE LOGIC
 document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Base user details
-    const name = document.getElementById('custName').value;
-    const phone = document.getElementById('custPhone').value;
-    const pickup = document.getElementById('pickupLoc').value;
-    const date = document.getElementById('bookDate').value;
-    const time = document.getElementById('bookTime').value;
-    const service = document.getElementById('serviceType').value;
+    const bookingData = {
+        name: document.getElementById('custName').value,
+        phone: document.getElementById('custPhone').value,
+        pickup: document.getElementById('pickupLoc').value,
+        date: document.getElementById('bookDate').value,
+        time: document.getElementById('bookTime').value,
+        service: document.getElementById('serviceType').value,
+        carBrand: document.getElementById('carBrand').value,
+        carModel: document.getElementById('carModel').value,
+        transmission: document.getElementById('transmission').value
+    };
 
-    // Newly Added Car Details
-    const carBrand = document.getElementById('carBrand').value;
-    const carModel = document.getElementById('carModel').value;
-    const transmission = document.getElementById('transmission').value;
+    // Database Me Save Karein (LocalStorage)
+    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
+    currentBookings.push(bookingData);
+    localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
 
-    // Manager Number
+    // Refresh Admin Table instantly if open
+    loadAdminTable();
+
+    // WhatsApp Trigger
     const managerWhatsAppNumber = "919420184273"; 
-
-    // Upgraded Premium Corporate Message Template
     const message = `🚨 *NEW PREMIUM DRIVER BOOKING* 🚨%0A%0A` +
-                    `👤 *Customer Name:* ${encodeURIComponent(name)}%0A` +
-                    `📞 *Contact Number:* ${encodeURIComponent(phone)}%0A` +
-                    `📍 *Pickup Location:* ${encodeURIComponent(pickup)}%0A` +
-                    `📅 *Date:* ${encodeURIComponent(date)}%0A` +
-                    `⏰ *Time:* ${encodeURIComponent(time)}%0A` +
-                    `🚗 *Service Type:* ${encodeURIComponent(service)}%0A%0A` +
+                    `👤 *Customer Name:* ${encodeURIComponent(bookingData.name)}%0A` +
+                    `📞 *Contact Number:* ${encodeURIComponent(bookingData.phone)}%0A` +
+                    `📍 *Pickup Location:* ${encodeURIComponent(bookingData.pickup)}%0A` +
+                    `📅 *Date:* ${encodeURIComponent(bookingData.date)}%0A` +
+                    `⏰ *Time:* ${encodeURIComponent(bookingData.time)}%0A` +
+                    `🚗 *Service Type:* ${encodeURIComponent(bookingData.service)}%0A%0A` +
                     `⚙️ *VEHICLE DETAILS:*%0A` +
-                    `🔹 *Brand:* ${encodeURIComponent(carBrand)}%0A` +
-                    `🔹 *Model:* ${encodeURIComponent(carModel)}%0A` +
-                    `🕹️ *Transmission:* ${encodeURIComponent(transmission)}%0A%0A` +
+                    `🔹 *Brand:* ${encodeURIComponent(bookingData.carBrand)}%0A` +
+                    `🔹 *Model:* ${encodeURIComponent(bookingData.carModel)}%0A` +
+                    `🕹️ *Transmission:* ${encodeURIComponent(bookingData.transmission)}%0A%0A` +
                     `⚡ _Please assign an experienced driver immediately!_`;
 
     const whatsappUrl = `https://wa.me/${managerWhatsAppNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
 });
+
+// SECRET ADMIN MANAGEMENT LOGIC
+function accessAdminPanel() {
+    // Sirf Aapko password pata hoga: admin123
+    const password = prompt("Enter Secret Admin Password:");
+    if (password === "admin123") {
+        document.getElementById('adminPanel').style.display = 'block';
+        loadAdminTable();
+        document.getElementById('adminPanel').scrollIntoView();
+    } else {
+        alert("Access Denied! Incorrect Password.");
+    }
+}
+
+function loadAdminTable() {
+    const tableBody = document.getElementById('adminTableBody');
+    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
+    tableBody.innerHTML = '';
+
+    if(currentBookings.length === 0) {
+        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-gray);">No bookings found in database.</td></tr>`;
+        return;
+    }
+
+    currentBookings.forEach((booking, index) => {
+        let row = document.createElement('tr');
+        row.innerHTML = `
+            <td><strong>${booking.name}</strong></td>
+            <td>${booking.phone}</td>
+            <td>${booking.pickup}</td>
+            <td>${booking.date} | ${booking.time}</td>
+            <td>${booking.carBrand} ${booking.carModel} (${booking.transmission.split(' ')[0]})</td>
+            <td><button class="btn-danger" onclick="deleteBooking(${index})">Clear</button></td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function deleteBooking(index) {
+    if(confirm("Are you sure you want to delete this record?")) {
+        let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
+        currentBookings.splice(index, 1);
+        localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
+        loadAdminTable();
+    }
+}
+
+function logoutAdmin() {
+    document.getElementById('adminPanel').style.display = 'none';
+    window.scrollTo(0,0);
+}
     </script>
 </body>
 </html>
