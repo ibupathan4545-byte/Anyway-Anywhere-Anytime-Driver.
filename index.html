@@ -367,48 +367,18 @@
                         <option value="Monthly Contract">Monthly Contract</option>
                     </select>
                 </div>
-                <!-- Car Details Section (Brand, Model & Transmission) -->
-<div class="form-group">
-    <label>Car Brand</label>
-    <i class="fa-solid fa-copyright"></i>
-    <select id="carBrand" onchange="updateCarModels()" required>
-        <option value="">-- Select Car Brand --</option>
-        <option value="Maruti Suzuki">Maruti Suzuki</option>
-        <option value="Hyundai">Hyundai</option>
-        <option value="Tata Motors">Tata Motors</option>
-        <option value="Mahindra">Mahindra</option>
-        <option value="Kia">Kia</option>
-        <option value="Toyota">Toyota</option>
-        <option value="Honda">Honda</option>
-        <option value="Skoda">Skoda</option>
-        <option value="Volkswagen">Volkswagen</option>
-        <option value="MG Motors">MG Motors</option>
-        <option value="Renault">Renault</option>
-        <option value="Nissan">Nissan</option>
-        <option value="Mercedes-Benz">Mercedes-Benz</option>
-        <option value="BMW">BMW</option>
-        <option value="Audi">Audi</option>
-        <option value="Jaguar / Land Rover">Jaguar / Land Rover</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label>Car Model</label>
+       <div class="form-group">
+        <label>Vehicle Type</label>
     <i class="fa-solid fa-car-side"></i>
-    <select id="carModel" required>
-        <option value="">-- First Select Brand --</option>
+    <select id="vehicleType" required>
+        <option value="">-- Select Vehicle Type --</option>
+        <option value="Hatchback (Alto, WagonR, Swift, etc.)">Hatchback (Alto, WagonR, Swift, etc.)</option>
+        <option value="Sedan (Dzire, City, Verna, Virtus, etc.)">Sedan (Dzire, City, Verna, Virtus, etc.)</option>
+        <option value="SUV / Compact SUV (Nexon, Creta, Thar, Scorpio, etc.)">SUV / Compact SUV (Nexon, Creta, Thar, etc.)</option>
+        <option value="MUV / 7-Seater (Ertiga, Innova, Carens, etc.)">MUV / 7-Seater (Ertiga, Innova, Carens, etc.)</option>
+        <option value="Luxury Segment (Mercedes, BMW, Audi, etc.)">Luxury Segment (Mercedes, BMW, Audi, etc.)</option>
     </select>
 </div>
-
-<div class="form-group">
-    <label>Transmission Type</label>
-    <i class="fa-solid fa-gears"></i>
-    <select id="transmission" required>
-        <option value="Manual (Stick Shift)">Manual (MT)</option>
-        <option value="Automatic (AMT/CVT/DCT)">Automatic (AT)</option>
-    </select>
-</div>
-
                 <button type="submit" class="btn-submit">
                     <i class="fa-brands fa-whatsapp"></i> Confirm & Book Driver
                 </button>
@@ -480,45 +450,11 @@
     </footer>
 
     <script>
- // Indian Market Car Database
-const carDatabase = {
-    "Maruti Suzuki": ["Alto K10", "S-Presso", "Celerio", "WagonR", "Swift", "Dzire", "Epic Swift", "Baleno", "Fronx", "Breza", "Grand Vitara", "Ertiga", "XL6", "Jimny", "Ciaz", "Eeco"],
-    "Hyundai": ["i10 Nios", "i20", "i20 N-Line", "Exter", "Aura", "Venue", "Creta", "Creta N-Line", "Alcazar", "Tucson", "Verna", "Ioniq 5"],
-    "Tata Motors": ["Tiago", "Tigor", "Altroz", "Punch", "Nexon", "Harrier", "Safari", "Curvv", "Sierra", "Tiago EV", "Punch EV", "Nexon EV"],
-    "Mahindra": ["XUV 3XO", "XUV400", "XUV700", "Scorpio-N", "Scorpio Classic", "Thar", "Thar Roxx (5-Door)", "Bolero", "Bolero Neo"],
-    "Kia": ["Sonet", "Seltos", "Carens", "Carnival", "EV6"],
-    "Toyota": ["Glanza", "Taisor", "Rumion", "Urban Cruiser Hyryder", "Innova Crysta", "Innova Hycross", "Fortuner", "Hilux", "Camry"],
-    "Honda": ["Amaze", "City (5th Gen)", "Elevate"],
-    "Skoda": ["Slavia", "Kushaq", "Kodiaq"],
-    "Volkswagen": ["Virtus", "Taigun", "Tiguan"],
-    "MG Motors": ["Comet EV", "Astor", "Hector", "ZS EV", "Gloster"],
-    "Renault": ["Kwid", "Triber", "Kiger"],
-    "Nissan": ["Magnite", "X-Trail"],
-    "Mercedes-Benz": ["A-Class", "C-Class", "E-Class", "S-Class", "GLA", "GLC", "GLE", "GLS", "G-Wagon", "AMG Series"],
-    "BMW": ["2 Series", "3 Series GL", "5 Series", "7 Series", "X1", "X3", "X5", "X7", "Z4", "iX EV", "M Series"],
-    "Audi": ["A4", "A6", "A8 L", "Q3", "Q5", "Q7", "Q8"],
-    "Jaguar / Land Rover": ["Jaguar XF", "Jaguar F-Pace", "Range Rover Evoque", "Range Rover Velar", "Range Rover Sport", "Defender", "Discovery"]
-};
-
-function updateCarModels() {
-    const brandSelect = document.getElementById('carBrand');
-    const modelSelect = document.getElementById('carModel');
-    const selectedBrand = brandSelect.value;
-    modelSelect.innerHTML = '<option value="">-- Select Car Model --</option>';
-    if (selectedBrand && carDatabase[selectedBrand]) {
-        carDatabase[selectedBrand].forEach(function(model) {
-            let option = document.createElement('option');
-            option.value = model;
-            option.textContent = model;
-            modelSelect.appendChild(option);
-        });
-    }
-}
-
-// FORM SUBMISSION AND STORAGE LOGIC
+ // FORM SUBMISSION AND STORAGE LOGIC
 document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    // Gathering user details
     const bookingData = {
         name: document.getElementById('custName').value,
         phone: document.getElementById('custPhone').value,
@@ -526,22 +462,20 @@ document.getElementById('driverBookingForm').addEventListener('submit', function
         date: document.getElementById('bookDate').value,
         time: document.getElementById('bookTime').value,
         service: document.getElementById('serviceType').value,
-        carBrand: document.getElementById('carBrand').value,
-        carModel: document.getElementById('carModel').value,
-        transmission: document.getElementById('transmission').value
+        vehicleType: document.getElementById('vehicleType').value // Updated field
     };
 
-    // Database Me Save Karein (LocalStorage)
+    // Save to Local Database
     let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
     currentBookings.push(bookingData);
     localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
 
-    // Refresh Admin Table instantly if open
+    // Refresh Admin Panel Table
     loadAdminTable();
 
-    // WhatsApp Trigger
+    // Manager WhatsApp Configuration
     const managerWhatsAppNumber = "919420184273"; 
-    const message = `🚨 *NEW PREMIUM DRIVER BOOKING* 🚨%0A%0A` +
+    const message = `🚨 *NEW DRIVER BOOKING* 🚨%0A%0A` +
                     `👤 *Customer Name:* ${encodeURIComponent(bookingData.name)}%0A` +
                     `📞 *Contact Number:* ${encodeURIComponent(bookingData.phone)}%0A` +
                     `📍 *Pickup Location:* ${encodeURIComponent(bookingData.pickup)}%0A` +
@@ -549,10 +483,8 @@ document.getElementById('driverBookingForm').addEventListener('submit', function
                     `⏰ *Time:* ${encodeURIComponent(bookingData.time)}%0A` +
                     `🚗 *Service Type:* ${encodeURIComponent(bookingData.service)}%0A%0A` +
                     `⚙️ *VEHICLE DETAILS:*%0A` +
-                    `🔹 *Brand:* ${encodeURIComponent(bookingData.carBrand)}%0A` +
-                    `🔹 *Model:* ${encodeURIComponent(bookingData.carModel)}%0A` +
-                    `🕹️ *Transmission:* ${encodeURIComponent(bookingData.transmission)}%0A%0A` +
-                    `⚡ _Please assign an experienced driver immediately!_`;
+                    `🔹 *Vehicle Type:* ${encodeURIComponent(bookingData.vehicleType)}%0A%0A` +
+                    `⚡ _Please assign a suitable driver immediately!_`;
 
     const whatsappUrl = `https://wa.me/${managerWhatsAppNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
@@ -560,7 +492,6 @@ document.getElementById('driverBookingForm').addEventListener('submit', function
 
 // SECRET ADMIN MANAGEMENT LOGIC
 function accessAdminPanel() {
-    // Sirf Aapko password pata hoga: admin123
     const password = prompt("Enter Secret Admin Password:");
     if (password === "admin123") {
         document.getElementById('adminPanel').style.display = 'block';
@@ -588,7 +519,7 @@ function loadAdminTable() {
             <td>${booking.phone}</td>
             <td>${booking.pickup}</td>
             <td>${booking.date} | ${booking.time}</td>
-            <td>${booking.carBrand} ${booking.carModel} (${booking.transmission.split(' ')[0]})</td>
+            <td>${booking.vehicleType}</td>
             <td><button class="btn-danger" onclick="deleteBooking(${index})">Clear</button></td>
         `;
         tableBody.appendChild(row);
