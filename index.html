@@ -286,9 +286,99 @@
     background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;
 }
 .btn-danger:hover { background: #dc2626; }
+    /* ---- PREMIUM WELCOME SCREEN STYLING ---- */
+#welcome-screen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background-color: #0f0f12;
+    z-index: 99999; /* Sabse upar dikhane ke liye */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.6s ease-out, visibility 0.6s;
+}
+
+.welcome-content {
+    text-align: center;
+}
+
+.welcome-logo {
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--primary-gold);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    animation: fadeInDown 1s ease-out;
+}
+
+.welcome-sub {
+    font-size: 1.5rem;
+    color: #ffffff;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-top: -5px;
+    animation: fadeInUp 1s ease-out 0.3s backwards;
+}
+
+.mumbai-tag {
+    font-size: 0.9rem;
+    color: var(--text-gray);
+    margin-top: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fadeInUp 1s ease-out 0.6s backwards;
+}
+
+/* Elegant Loading Line Animation */
+.loader-bar {
+    width: 200px;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 30px auto 0 auto;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-gold);
+    box-shadow: 0 0 10px var(--primary-gold);
+    animation: loadProgress 2s linear forwards;
+}
+
+/* Animations Keyframes */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes loadProgress {
+    to { width: 100%; }
+}
+
+/* Fade out class for smooth exit */
+.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
     </style>
 </head>
 <body>
+    <div id="welcome-screen">
+    <div class="welcome-content">
+        <div class="welcome-logo">Anyway</div>
+        <div class="welcome-sub">Anywhere Anytime Driver</div>
+        <div class="mumbai-tag">Mumbai's 24/7 Chauffeur Service</div>
+        <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+</div>
 
     <header>
         <div class="logo">Anyway <span>Anywhere Anytime</span></div>
@@ -539,6 +629,14 @@ function logoutAdmin() {
     document.getElementById('adminPanel').style.display = 'none';
     window.scrollTo(0,0);
 }
+   // WELCOME SCREEN AUTO-HIDE LOGIC
+window.addEventListener('DOMContentLoaded', () => {
+    // 2.5 Seconds tak welcome screen dikhegi, phir smooth fade-out hogi
+    setTimeout(() => {
+        const welcomeScreen = document.getElementById('welcome-screen');
+        welcomeScreen.classList.add('fade-out');
+    }, 2500); 
+});
     </script>
 </body>
 </html>
