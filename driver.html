@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Partner Portal | Anyway Anywhere Anytime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark: #0f0f12;
+            --card-bg: #16161d;
+            --primary-gold: #f4c430;
+            --text-light: #ffffff;
+            --text-gray: #9ca3af;
+            --success-green: #10b981;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); padding: 20px; }
+        .container { max-width: 600px; margin: 40px auto; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); border: 1px solid rgba(244, 196, 48, 0.1); }
+        
+        h2 { text-align: center; color: var(--primary-gold); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        p.subtitle { text-align: center; color: var(--text-gray); margin-bottom: 30px; font-size: 0.9rem; }
+        
+        .form-group { margin-bottom: 20px; position: relative; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-light); font-size: 0.9rem; }
+        .form-group i { position: absolute; left: 12px; top: 38px; color: var(--primary-gold); }
+        .form-group input, .form-group select { width: 100%; padding: 12px 12px 12px 35px; background: #22222b; border: 1px solid #333344; border-radius: 6px; color: white; font-size: 1rem; }
+        .form-group input:focus { border-color: var(--primary-gold); outline: none; }
+        
+        .btn-block { width: 100%; padding: 14px; background: var(--primary-gold); border: none; border-radius: 6px; color: #000; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .btn-block:hover { background: #e0b324; transform: translateY(-2px); }
+
+        /* Subscription Card Styling */
+        .sub-card { background: rgba(244, 196, 48, 0.05); border: 2px dashed var(--primary-gold); padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 25px; display: none; }
+        .sub-card h3 { color: var(--primary-gold); font-size: 1.5rem; margin-bottom: 10px; }
+        .sub-card .price { font-size: 2rem; font-weight: bold; color: white; margin-bottom: 10px; }
+        
+        /* Private Driver Dashboard */
+        #driver-dashboard { display: none; }
+        .job-card { background: #1e1e26; border-left: 4px solid var(--primary-gold); padding: 15px; margin-top: 15px; border-radius: 4px; }
+        .job-details { margin-bottom: 12px; font-size: 0.95rem; line-height: 1.6; }
+        .badge { background: var(--success-green); color: black; padding: 2px 8px; font-size: 0.8rem; font-weight: bold; border-radius: 3px; float: right; }
+    </style>
+</head>
+<body>
+
+    <!-- SECTION 1: DRIVER REGISTRATION -->
+    <div class="container" id="reg-section">
+        <h2>Driver Partner</h2>
+        <p class="subtitle">Register below to start getting corporate & private driver leads.</p>
+        
+        <form id="driverRegForm">
+            <div class="form-group">
+                <label>Full Name</label>
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="driverName" required placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label>WhatsApp Number</label>
+                <i class="fa-solid fa-phone"></i>
+                <input type="tel" id="driverPhone" required placeholder="Enter active WhatsApp number">
+            </div>
+            <div class="form-group">
+                <label>Driving License No.</label>
+                <i class="fa-solid fa-id-card"></i>
+                <input type="text" id="driverLicense" required placeholder="MH-XX-YYYYYYYYYYY">
+            </div>
+            <button type="submit" class="btn-block">Continue to Activation</button>
+        </form>
+    </div>
+
+    <!-- SECTION 2: SUBSCRIPTION PAYWALL -->
+    <div class="container" id="paywall-section" style="display: none;">
+        <h2>Activate Your Account</h2>
+        <p class="subtitle">Subscribe to our premium partner network to unlock premium booking leads.</p>
+        
+        <div class="sub-card" style="display: block;">
+            <h3>Premium Driver Plan</h3>
+            <div class="price">₹499 <span style="font-size: 1rem; color: var(--text-gray);">/ Month</span></div>
+            <p style="color: var(--text-gray); font-size: 0.85rem;">Get unlimited instant ride bookings directly from customers.</p>
+        </div>
+
+        <button id="payBtn" class="btn-block" style="background: var(--success-green); color: white;">
+            <i class="fa-solid fa-lock"></i> Pay ₹499 & Activate Now
+        </button>
+    </div>
+
+    <!-- SECTION 3: PRIVATE DRIVER DASHBOARD (POST PAYMENT) -->
+    <div class="container" id="driver-dashboard">
+        <h2><i class="fa-solid fa-circle-check" style="color: var(--success-green);"></i> Partner Dashboard</h2>
+        <p class="subtitle" id="welcomeDriverTxt">Welcome, Driver Partner!</p>
+        
+        <h4 style="margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 8px;">LIVE AVAILABLE JOBS</h4>
+        
+        <div id="jobsList">
+            <!-- Dynamic jobs will appear here -->
+            <div class="job-card">
+                <span class="badge">ACTIVE</span>
+                <div class="job-details">
+                    <strong>📍 Pickup:</strong> Bandra West, Mumbai<br>
+                    <strong>📅 Date/Time:</strong> Today | 09:30 PM<br>
+                    <strong>🚗 Vehicle Type:</strong> SUV / Thar<br>
+                    <strong>💼 Service:</strong> Outstation Round Trip
+                </div>
+                <button class="btn-block" style="padding: 8px; font-size: 0.85rem;" onclick="acceptJob()">Accept Job & Contact Client</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let driverData = {};
+
+        // Handle Registration Form
+        document.getElementById('driverRegForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            driverData.name = document.getElementById('driverName').value;
+            driverData.phone = document.getElementById('driverPhone').value;
+            driverData.license = document.getElementById('driverLicense').value;
+
+            // Move to Payment screen
+            document.getElementById('reg-section').style.display = 'none';
+            document.getElementById('paywall-section').style.display = 'block';
+        });
+
+        // Handle Mock Payment Action
+        document.getElementById('payBtn').addEventListener('click', function() {
+            alert("Processing Mock Payment of ₹499 via Gateway...");
+            
+            // Success Simulation
+            document.getElementById('paywall-section').style.display = 'none';
+            document.getElementById('driver-dashboard').style.display = 'block';
+            document.getElementById('welcomeDriverTxt').innerText = `Welcome, ${driverData.name}! Your subscription is ACTIVE.`;
+        });
+
+        function acceptJob() {
+            alert("Job Accepted Successfully! Client contact information and map route has been sent to your registered WhatsApp number.");
+        }
+    </script>
+</body>
+</html>
