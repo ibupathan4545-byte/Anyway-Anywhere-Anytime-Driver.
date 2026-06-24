@@ -553,7 +553,7 @@
 document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
-    // Gathering user details
+    // Customer ki details collect karna
     const bookingData = {
         name: document.getElementById('custName').value,
         phone: document.getElementById('custPhone').value,
@@ -561,32 +561,19 @@ document.getElementById('driverBookingForm').addEventListener('submit', function
         date: document.getElementById('bookDate').value,
         time: document.getElementById('bookTime').value,
         service: document.getElementById('serviceType').value,
-        vehicleType: document.getElementById('vehicleType').value // Updated field
+        vehicleType: document.getElementById('vehicleType').value,
+        status: "ACTIVE" // Taki driver ko active dikhe
     };
 
-    // Save to Local Database
+    // Shared Database (LocalStorage) mein push karna
     let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
     currentBookings.push(bookingData);
     localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
 
-    // Refresh Admin Panel Table
-    loadAdminTable();
-
-    // Manager WhatsApp Configuration
-    const managerWhatsAppNumber = "919420184273"; 
-    const message = `🚨 *NEW DRIVER BOOKING* 🚨%0A%0A` +
-                    `👤 *Customer Name:* ${encodeURIComponent(bookingData.name)}%0A` +
-                    `📞 *Contact Number:* ${encodeURIComponent(bookingData.phone)}%0A` +
-                    `📍 *Pickup Location:* ${encodeURIComponent(bookingData.pickup)}%0A` +
-                    `📅 *Date:* ${encodeURIComponent(bookingData.date)}%0A` +
-                    `⏰ *Time:* ${encodeURIComponent(bookingData.time)}%0A` +
-                    `🚗 *Service Type:* ${encodeURIComponent(bookingData.service)}%0A%0A` +
-                    `⚙️ *VEHICLE DETAILS:*%0A` +
-                    `🔹 *Vehicle Type:* ${encodeURIComponent(bookingData.vehicleType)}%0A%0A` +
-                    `⚡ _Please assign a suitable driver immediately!_`;
-
-    const whatsappUrl = `https://wa.me/${managerWhatsAppNumber}?text=${message}`;
-    window.open(whatsappUrl, '_blank');
+    alert("Booking Submitted Successfully! Drivers will view your ride shortly.");
+    
+    // Form clear kar do
+    document.getElementById('driverBookingForm').reset();
 });
 
 // SECRET ADMIN MANAGEMENT LOGIC
