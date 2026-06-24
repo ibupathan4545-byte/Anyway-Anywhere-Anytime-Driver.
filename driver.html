@@ -109,33 +109,77 @@
     </div>
 
     <script>
-        let driverData = {};
+let driverData = {};
 
-        // Handle Registration Form
-        document.getElementById('driverRegForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            driverData.name = document.getElementById('driverName').value;
-            driverData.phone = document.getElementById('driverPhone').value;
-            driverData.license = document.getElementById('driverLicense').value;
+// Handle Registration Form
+document.getElementById('driverRegForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    driverData.name = document.getElementById('driverName').value;
+    driverData.phone = document.getElementById('driverPhone').value;
+    driverData.license = document.getElementById('driverLicense').value;
 
-            // Move to Payment screen
-            document.getElementById('reg-section').style.display = 'none';
-            document.getElementById('paywall-section').style.display = 'block';
-        });
+    // Move to Payment screen
+    document.getElementById('reg-section').style.display = 'none';
+    document.getElementById('paywall-section').style.display = 'block';
+});
 
-        // Handle Mock Payment Action
-        document.getElementById('payBtn').addEventListener('click', function() {
-            alert("Processing Mock Payment of ₹499 via Gateway...");
-            
-            // Success Simulation
-            document.getElementById('paywall-section').style.display = 'none';
-            document.getElementById('driver-dashboard').style.display = 'block';
-            document.getElementById('welcomeDriverTxt').innerText = `Welcome, ${driverData.name}! Your subscription is ACTIVE.`;
-        });
+// Handle Payment & Load Real Jobs
+document.getElementById('payBtn').addEventListener('click', function() {
+    document.getElementById('paywall-section').style.display = 'none';
+    document.getElementById('driver-dashboard').style.display = 'block';
+    document.getElementById('welcomeDriverTxt').innerText = `Welcome, ${driverData.name}! Your subscription is ACTIVE.`;
+    
+    // Customer ka live data load karo
+    loadLiveJobs();
+});
 
-        function acceptJob() {
-            alert("Job Accepted Successfully! Client contact information and map route has been sent to your registered WhatsApp number.");
-        }
+// Real Customer Data ko Display karne ka Function
+function loadLiveJobs() {
+    const jobsList = document.getElementById('jobsList');
+    // Main website se shared bookings uthana
+    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
+    
+    jobsList.innerHTML = ''; // Purana static text clear karo
+
+    // Agar koi booking nahi hai
+    if (currentBookings.length === 0) {
+        jobsList.innerHTML = `<p style="text-align:center; color:var(--text-gray); padding: 20px;">No live customer bookings available right now.</p>`;
+        return;
+    }
+
+    // Har ek customer ki booking ko job card mein badalna
+    currentBookings.forEach((job, index) => {
+        let jobCard = document.createElement('div');
+        jobCard.className = 'job-card';
+        jobCard.innerHTML = `
+            <span class="badge" style="background-color: var(--primary-gold); color: black;">₹ PREMIUM</span>
+            <div class="job-details">
+                <strong>👤 Customer:</strong> ${job.name}<br>
+                <strong>📞 Contact:</strong> ${job.phone}<br>
+                <strong>📍 Pickup:</strong> ${job.pickup}<br>
+                <strong>📅 Date/Time:</strong> ${job.date} | ${job.time}<br>
+                <strong>🚗 Vehicle:</strong> ${job.vehicleType}<br>
+                <strong>💼 Service:</strong> ${job.service}
+            </div>
+            <button class="btn-block" style="padding: 8px; font-size: 0.85rem; margin-top: 10px;" onclick="acceptJob(${index})">Accept Job & Contact Client</button>
+        `;
+        jobsList.appendChild(jobCard);
+    });
+}
+
+function acceptJob(index) {
+    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
+    let selectedJob = currentBookings[index];
+    
+    alert(`Job Confirmed!\n\nPlease call the customer right now:\nName: ${selectedJob.name}\nPhone: ${selectedJob.phone}`);
+    
+    // Job accept hone ke baad database se hata do taki doosre driver ko na dikhe
+    currentBookings.splice(index, 1);
+    localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
+    
+    // Table refresh karo
+    loadLiveJobs();
+}
     </script>
 </body>
 </html>
