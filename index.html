@@ -554,7 +554,7 @@
 <script>
     // 1. Firebase Initialize Karna
     const firebaseConfig = {
-        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM", // Jo aapne copy kiya tha
+        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM", 
         authDomain: "anywaydriver.firebaseapp.com",
         databaseURL: "https://anywaydriver-default-rtdb.firebaseio.com",
         projectId: "anywaydriver",
@@ -577,7 +577,7 @@
             time: document.getElementById('bookTime').value,
             service: document.getElementById('serviceType').value,
             vehicleType: document.getElementById('vehicleType').value,
-            driverStatus: "AVAILABLE", // Default status
+            driverStatus: "AVAILABLE", 
             acceptedBy: ""
         };
 
@@ -592,6 +592,22 @@
                 alert("Database Connection Error. Try Again!");
             });
     });
+
+    // ==========================================
+    // 🔴 INJECTED: LOADING SCREEN REMOVAL LOGIC
+    // ==========================================
+    window.addEventListener('load', () => {
+        // Page load hone par maximum 2.5 seconds ke andar preloader hatega hi hatega
+        setTimeout(() => {
+            const welcomeScreen = document.getElementById('welcome-screen');
+            if (welcomeScreen && !welcomeScreen.classList.contains('fade-out')) {
+                welcomeScreen.classList.add('fade-out');
+                console.log("Welcome screen forced out successfully!");
+            }
+        }, 2500); 
+    });
 </script>
+</body>
+</html>
 </body>
 </html>
