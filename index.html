@@ -548,32 +548,28 @@
 </div>
     </footer>
 
-    <script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
-    // Your Firebase Configuration object
+    // 1. Firebase Initialize Karna
     const firebaseConfig = {
-        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AMxG6Codyys",
+        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM", // Jo aapne copy kiya tha
         authDomain: "anywaydriver.firebaseapp.com",
         databaseURL: "https://anywaydriver-default-rtdb.firebaseio.com",
         projectId: "anywaydriver",
-        storageBucket: "anywaydriver.firebasestorage.app",
-        messagingSenderId: "481304426394",
-        appId: "1:481304426394:web:4a4f7a4b4595b3cfb22c23"
+        storageBucket: "anywaydriver.appspot.com",
     };
-
-    // Initialize Firebase Compat
+    
+    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const database = firebase.database();
 
-    // Customer Form Submission Logic
+    // 2. Handle Form Submission (Push to Internet Cloud)
     document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
         e.preventDefault();
 
-        // Details extraction
-        const newBooking = {
+        const bookingData = {
             name: document.getElementById('custName').value,
             phone: document.getElementById('custPhone').value,
             pickup: document.getElementById('pickupLoc').value,
@@ -581,69 +577,21 @@
             time: document.getElementById('bookTime').value,
             service: document.getElementById('serviceType').value,
             vehicleType: document.getElementById('vehicleType').value,
-            driverStatus: "AVAILABLE", // Driver status state
+            driverStatus: "AVAILABLE", // Default status
             acceptedBy: ""
         };
 
-        // Internet Cloud Database (Firebase) mein direct push karna
-        database.ref('global_bookings').push(newBooking)
+        // Firebase Realtime Database mein unique ID ke sath save karna (.push())
+        database.ref('bookings').push(bookingData)
             .then(() => {
-                alert("Booking Broadcasted Online! Available drivers are reviewing your trip details.");
+                alert("Booking Submitted Online! Drivers across Mumbai will see your ride now.");
                 document.getElementById('driverBookingForm').reset();
             })
             .catch((error) => {
-                alert("Database Error: " + error.message);
+                console.error("Firebase Error: ", error);
+                alert("Database Connection Error. Try Again!");
             });
     });
-
-    // Secret Admin Panel Manual View (Optional local dashboard)
-    function accessAdminPanel() {
-        const password = prompt("Enter Secret Admin Password:");
-        if (password === "admin123") {
-            document.getElementById('adminPanel').style.display = 'block';
-            document.getElementById('adminPanel').scrollIntoView();
-            listenToAdminBookings();
-        } else {
-            alert("Access Denied!");
-        }
-    }
-
-    function listenToAdminBookings() {
-        database.ref('global_bookings').on('value', (snapshot) => {
-            const tableBody = document.getElementById('adminTableBody');
-            tableBody.innerHTML = '';
-            const data = snapshot.val();
-            
-            if(!data) {
-                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No cloud bookings found.</td></tr>`;
-                return;
-            }
-
-            Object.keys(data).forEach((key) => {
-                let booking = data[key];
-                let row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><strong>${booking.name}</strong></td>
-                    <td>${booking.phone}</td>
-                    <td>${booking.pickup}</td>
-                    <td>${booking.date} | ${booking.time}</td>
-                    <td>${booking.driverStatus} ${booking.acceptedBy ? `(${booking.acceptedBy})` : ''}</td>
-                    <td><button class="btn-danger" onclick="deleteCloudBooking('${key}')">Remove</button></td>
-                `;
-                tableBody.appendChild(row);
-            });
-        });
-    }
-
-    function deleteCloudBooking(key) {
-        if(confirm("Remove this entry from live cloud?")) {
-            database.ref('global_bookings/' + key).remove();
-        }
-    }
-
-    function logoutAdmin() {
-        document.getElementById('adminPanel').style.display = 'none';
-    }
-    </script>
+</script>
 </body>
 </html>
