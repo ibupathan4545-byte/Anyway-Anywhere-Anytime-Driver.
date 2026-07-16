@@ -108,17 +108,109 @@
         </div>
     </div>
 
-    <script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
 <script>
     // Global Driver Session details
     let driverData = { name: "XYZ Partner", phone: "", license: "" };
 
-    // Your Firebase Configuration object
+    // Initialize Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM
-    </script>
+        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM",
+        authDomain: "anywaydriver.firebaseapp.com",
+        databaseURL: "https://anywaydriver-default-rtdb.firebaseio.com",
+        projectId: "anywaydriver",
+        storageBucket: "anywaydriver.appspot.com",
+    };
+    
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    // Handle Registration Form
+    document.getElementById('driverRegForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        driverData.name = document.getElementById('driverName').value;
+        driverData.phone = document.getElementById('driverPhone').value;
+        driverData.license = document.getElementById('driverLicense').value;
+
+        document.getElementById('reg-section').style.display = 'none';
+        document.getElementById('paywall-section').style.display = 'block';
+    });
+
+    // Handle Payment Button & Start Listening to Cloud
+    document.getElementById('payBtn').addEventListener('click', function() {
+        document.getElementById('paywall-section').style.display = 'none';
+        document.getElementById('driver-dashboard').style.display = 'block';
+        document.getElementById('welcomeDriverTxt').innerText = `Welcome, ${driverData.name}! Your subscription is ACTIVE.`;
+        
+        // INTERNET SE LIVE SYNC START KARNA
+        listenToLiveJobs();
+    });
+
+    // Firebase Realtime Listener Engine
+    function listenToLiveJobs() {
+        // .on('value') matlab cloud me jab bhi kuch badlega, ye function automatic chalega
+        database.ref('bookings').on('value', (snapshot) => {
+            const jobsList = document.getElementById('jobsList');
+            jobsList.innerHTML = ''; // Purani list saaf karo
+
+            if (!snapshot.exists()) {
+                jobsList.innerHTML = `<p style="text-align:center; color:var(--text-gray); padding: 20px;">No live customer bookings available right now.</p>`;
+                return;
+            }
+
+            const data = snapshot.val();
+            
+            // Loop through all bookings from Cloud Firebase
+            Object.keys(data).forEach((firebaseKey) => {
+                const job = data[firebaseKey];
+                let isAccepted = job.driverStatus === "ACCEPTED";
+                
+                let jobCard = document.createElement('div');
+                jobCard.className = 'job-card';
+                
+                if (isAccepted) {
+                    jobCard.style.background = "#2d1616";
+                    jobCard.style.borderLeft = "4px solid #ef4444";
+                } else {
+                    jobCard.style.background = "#1e1e26";
+                    jobCard.style.borderLeft = "4px solid var(--primary-gold)";
+                }
+
+                jobCard.innerHTML = `
+                    <span class="badge" style="background-color: ${isAccepted ? '#ef4444' : 'var(--primary-gold)'}; color: ${isAccepted ? 'white' : 'black'};">
+                        ${isAccepted ? '🔴 TAKEN' : '⚡ AVAILABLE'}
+                    </span>
+                    <div class="job-details">
+                        <strong>👤 Customer:</strong> ${job.name}<br>
+                        ${isAccepted ? `<strong>📞 Contact:</strong> ${job.phone}<br>` : `<strong>📞 Contact:</strong> ********** (Accept to view)<br>`}
+                        <strong>📍 Pickup:</strong> ${job.pickup}<br>
+                        <strong>📅 Date/Time:</strong> ${job.date} | ${job.time}<br>
+                        <strong>🚗 Vehicle:</strong> ${job.vehicleType}<br>
+                        <strong>💼 Service:</strong> ${job.service}
+                        ${isAccepted ? `<br><div style="margin-top:10px; color:#ef4444; font-weight:bold; font-size:1.1rem;"><i class="fa-solid fa-circle-user"></i> ACCEPTED BY: ${job.acceptedBy}</div>` : ''}
+                    </div>
+                    
+                    ${isAccepted ? '' : `<button class="btn-block" style="padding: 8px; font-size: 0.85rem; margin-top: 10px;" onclick="acceptJob('${firebaseKey}')">Accept Job & Contact Client</button>`}
+                `;
+                jobsList.appendChild(jobCard);
+            });
+        });
+    }
+
+    // Cloud Database update state when accepted
+    function acceptJob(firebaseKey) {
+        // Firebase Cloud mein data update karna taaki baaki drivers ko bhi real-time red ho jaye
+        database.ref('bookings/' + firebaseKey).update({
+            driverStatus: "ACCEPTED",
+            acceptedBy: driverData.name
+        }).then(() => {
+            alert(`Job Confirmed!\n\nYou have accepted this ride. Check the client details on screen.`);
+        }).catch((error) => {
+            alert("Error accepting job. Try again!");
+        });
+    }
+</script>
 </body>
 </html>
