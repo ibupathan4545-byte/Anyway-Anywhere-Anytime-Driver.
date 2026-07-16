@@ -549,90 +549,101 @@
     </footer>
 
     <script>
- // FORM SUBMISSION AND STORAGE LOGIC
-document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    // Customer ki details collect karna
-    const bookingData = {
-        name: document.getElementById('custName').value,
-        phone: document.getElementById('custPhone').value,
-        pickup: document.getElementById('pickupLoc').value,
-        date: document.getElementById('bookDate').value,
-        time: document.getElementById('bookTime').value,
-        service: document.getElementById('serviceType').value,
-        vehicleType: document.getElementById('vehicleType').value,
-        status: "ACTIVE" // Taki driver ko active dikhe
+<script>
+    // Your Firebase Configuration object
+    const firebaseConfig = {
+        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AMxG6Codyys",
+        authDomain: "anywaydriver.firebaseapp.com",
+        databaseURL: "https://anywaydriver-default-rtdb.firebaseio.com",
+        projectId: "anywaydriver",
+        storageBucket: "anywaydriver.firebasestorage.app",
+        messagingSenderId: "481304426394",
+        appId: "1:481304426394:web:4a4f7a4b4595b3cfb22c23"
     };
 
-    // Shared Database (LocalStorage) mein push karna
-    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
-    currentBookings.push(bookingData);
-    localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
+    // Initialize Firebase Compat
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
 
-    alert("Booking Submitted Successfully! Drivers will view your ride shortly.");
-    
-    // Form clear kar do
-    document.getElementById('driverBookingForm').reset();
-});
+    // Customer Form Submission Logic
+    document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-// SECRET ADMIN MANAGEMENT LOGIC
-function accessAdminPanel() {
-    const password = prompt("Enter Secret Admin Password:");
-    if (password === "admin123") {
-        document.getElementById('adminPanel').style.display = 'block';
-        loadAdminTable();
-        document.getElementById('adminPanel').scrollIntoView();
-    } else {
-        alert("Access Denied! Incorrect Password.");
-    }
-}
+        // Details extraction
+        const newBooking = {
+            name: document.getElementById('custName').value,
+            phone: document.getElementById('custPhone').value,
+            pickup: document.getElementById('pickupLoc').value,
+            date: document.getElementById('bookDate').value,
+            time: document.getElementById('bookTime').value,
+            service: document.getElementById('serviceType').value,
+            vehicleType: document.getElementById('vehicleType').value,
+            driverStatus: "AVAILABLE", // Driver status state
+            acceptedBy: ""
+        };
 
-function loadAdminTable() {
-    const tableBody = document.getElementById('adminTableBody');
-    let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
-    tableBody.innerHTML = '';
-
-    if(currentBookings.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:var(--text-gray);">No bookings found in database.</td></tr>`;
-        return;
-    }
-
-    currentBookings.forEach((booking, index) => {
-        let row = document.createElement('tr');
-        row.innerHTML = `
-            <td><strong>${booking.name}</strong></td>
-            <td>${booking.phone}</td>
-            <td>${booking.pickup}</td>
-            <td>${booking.date} | ${booking.time}</td>
-            <td>${booking.vehicleType}</td>
-            <td><button class="btn-danger" onclick="deleteBooking(${index})">Clear</button></td>
-        `;
-        tableBody.appendChild(row);
+        // Internet Cloud Database (Firebase) mein direct push karna
+        database.ref('global_bookings').push(newBooking)
+            .then(() => {
+                alert("Booking Broadcasted Online! Available drivers are reviewing your trip details.");
+                document.getElementById('driverBookingForm').reset();
+            })
+            .catch((error) => {
+                alert("Database Error: " + error.message);
+            });
     });
-}
 
-function deleteBooking(index) {
-    if(confirm("Are you sure you want to delete this record?")) {
-        let currentBookings = JSON.parse(localStorage.getItem('aaa_bookings')) || [];
-        currentBookings.splice(index, 1);
-        localStorage.setItem('aaa_bookings', JSON.stringify(currentBookings));
-        loadAdminTable();
+    // Secret Admin Panel Manual View (Optional local dashboard)
+    function accessAdminPanel() {
+        const password = prompt("Enter Secret Admin Password:");
+        if (password === "admin123") {
+            document.getElementById('adminPanel').style.display = 'block';
+            document.getElementById('adminPanel').scrollIntoView();
+            listenToAdminBookings();
+        } else {
+            alert("Access Denied!");
+        }
     }
-}
 
-function logoutAdmin() {
-    document.getElementById('adminPanel').style.display = 'none';
-    window.scrollTo(0,0);
-}
-   // WELCOME SCREEN AUTO-HIDE LOGIC
-window.addEventListener('DOMContentLoaded', () => {
-    // 2.5 Seconds tak welcome screen dikhegi, phir smooth fade-out hogi
-    setTimeout(() => {
-        const welcomeScreen = document.getElementById('welcome-screen');
-        welcomeScreen.classList.add('fade-out');
-    }, 2500); 
-});
+    function listenToAdminBookings() {
+        database.ref('global_bookings').on('value', (snapshot) => {
+            const tableBody = document.getElementById('adminTableBody');
+            tableBody.innerHTML = '';
+            const data = snapshot.val();
+            
+            if(!data) {
+                tableBody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No cloud bookings found.</td></tr>`;
+                return;
+            }
+
+            Object.keys(data).forEach((key) => {
+                let booking = data[key];
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${booking.name}</strong></td>
+                    <td>${booking.phone}</td>
+                    <td>${booking.pickup}</td>
+                    <td>${booking.date} | ${booking.time}</td>
+                    <td>${booking.driverStatus} ${booking.acceptedBy ? `(${booking.acceptedBy})` : ''}</td>
+                    <td><button class="btn-danger" onclick="deleteCloudBooking('${key}')">Remove</button></td>
+                `;
+                tableBody.appendChild(row);
+            });
+        });
+    }
+
+    function deleteCloudBooking(key) {
+        if(confirm("Remove this entry from live cloud?")) {
+            database.ref('global_bookings/' + key).remove();
+        }
+    }
+
+    function logoutAdmin() {
+        document.getElementById('adminPanel').style.display = 'none';
+    }
     </script>
 </body>
 </html>
