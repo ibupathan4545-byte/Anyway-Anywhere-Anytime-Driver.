@@ -15,6 +15,7 @@
             --card-white: #ffffff;
             --text-dark: #1f2937;
             --text-light: #6b7280;
+            --badge-red: #ef4444;
         }
 
         * {
@@ -132,6 +133,7 @@
             list-style: none;
             gap: 0.8rem;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         nav a {
@@ -143,6 +145,10 @@
             transition: all 0.3s ease;
             font-size: 0.95rem;
             cursor: pointer;
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
         nav a:hover, nav a.active {
@@ -151,13 +157,22 @@
             border-bottom: 2px solid var(--accent-gold);
         }
 
-        /* Offers Tab Hidden By Default */
-        .offer-tab {
+        /* Dynamic Hidden Tabs Styling */
+        .dynamic-tab {
             display: none;
-            background: var(--accent-gold);
-            color: var(--primary-green) !important;
-            font-weight: bold !important;
-            border-radius: 20px;
+        }
+
+        .badge-count {
+            background-color: var(--badge-red);
+            color: white;
+            font-size: 0.72rem;
+            font-weight: bold;
+            padding: 2px 6px;
+            border-radius: 10px;
+            min-width: 18px;
+            text-align: center;
+            line-height: 1;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .page-content {
@@ -193,31 +208,6 @@
         .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
         .hero h1 span { color: var(--accent-gold); }
         .hero p { font-size: 1.1rem; margin-bottom: 2rem; color: #e5e7eb; }
-
-        /* Conditional Offer Alert Banner (Hidden by Default) */
-        .offer-alert-banner {
-            display: none;
-            background: linear-gradient(135deg, var(--accent-gold), #fff3b0);
-            color: var(--primary-green);
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            align-items: center;
-            justify-content: space-between;
-            border: 1px solid var(--primary-green);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Requirements Alert Bar */
-        .req-alert-banner {
-            display: none;
-            background: #1e293b;
-            color: #f8fafc;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            border-left: 5px solid var(--accent-gold);
-        }
 
         .btn {
             display: inline-block;
@@ -316,16 +306,6 @@
         .stats-item h3 { font-size: 1.8rem; color: var(--accent-gold); }
         .stats-item p { font-size: 0.9rem; margin-top: 4px; }
 
-        /* Calculator Card */
-        .calc-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            border-top: 4px solid var(--accent-gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-            margin: 2rem 0;
-        }
-
         /* FAQ Accordion */
         .faq-item {
             background: white;
@@ -419,7 +399,21 @@
             <nav>
                 <ul>
                     <li><a href="#" id="nav-home" class="active" onclick="switchPage('home')">Home</a></li>
-                    <li><a href="#" id="nav-offers" class="offer-tab" onclick="switchPage('offers')"><i class="fa-solid fa-gift"></i> Offers</a></li>
+                    
+                    <!-- DYNAMIC HIDDEN TABS WITH NOTIFICATION BADGE COUNTER -->
+                    <li>
+                        <a href="#" id="nav-reqs" class="dynamic-tab" onclick="switchPage('reqs')">
+                            <i class="fa-solid fa-bullhorn"></i> Requirements
+                            <span id="req-badge" class="badge-count">0</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" id="nav-offers" class="dynamic-tab" onclick="switchPage('offers')">
+                            <i class="fa-solid fa-gift"></i> Offers
+                            <span id="offer-badge" class="badge-count">0</span>
+                        </a>
+                    </li>
+
                     <li><a href="#" id="nav-about" onclick="switchPage('about')">About Us</a></li>
                     <li><a href="#" id="nav-drivers" onclick="switchPage('drivers')">Hire Drivers</a></li>
                     <li><a href="#" id="nav-rentals" onclick="switchPage('rentals')">Car Rentals</a></li>
@@ -432,21 +426,6 @@
 
     <!-- PAGE 1: HOME -->
     <div id="page-home" class="page-content active-page">
-        <!-- Conditional Offer Alert Banner (Hidden by default) -->
-        <div id="home-offer-alert" class="offer-alert-banner">
-            <div>
-                <strong id="offer-alert-title"><i class="fa-solid fa-bullhorn"></i> Special Offer Available!</strong>
-                <p id="offer-alert-desc" style="font-size: 0.95rem; margin-top: 4px;"></p>
-            </div>
-            <button class="btn btn-gold" onclick="switchPage('offers')">View Offer</button>
-        </div>
-
-        <!-- Requirements Alert Banner -->
-        <div id="home-req-alert" class="req-alert-banner">
-            <strong id="req-alert-title" style="color: var(--accent-gold); font-size: 1.05rem;"><i class="fa-solid fa-bell"></i> Current Live Requirement Broadcast:</strong>
-            <p id="req-alert-desc" style="font-size: 0.95rem; margin-top: 5px; color: #e2e8f0;"></p>
-        </div>
-
         <div class="hero">
             <h1>Anyway Anywhere Anytime <span>Drivers</span></h1>
             <p>Reliable Chauffeurs | Rental Cars | Certified Pre-Owned Vehicles</p>
@@ -504,35 +483,8 @@
             </div>
         </div>
 
-        <!-- Interactive Instant Driver Cost Estimator -->
-        <div class="calc-box">
-            <h3 style="color: var(--primary-green); margin-bottom: 1rem;"><i class="fa-solid fa-calculator" style="color: var(--accent-gold);"></i> Quick Ride Fare Estimator</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                <div class="form-group">
-                    <label>Ride Type</label>
-                    <select id="calc-type" onchange="calculateFare()">
-                        <option value="local">Local City Trip (4 Hours)</option>
-                        <option value="full">Full Day Local (8 Hours)</option>
-                        <option value="outstation">Outstation Trip (Per Day)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Car Category</label>
-                    <select id="calc-car" onchange="calculateFare()">
-                        <option value="hatch">Hatchback / Sedan</option>
-                        <option value="suv">SUV / MUV (Innova)</option>
-                        <option value="luxury">Luxury Segment (BMW / Audi / Benz)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Estimated Driver Fare</label>
-                    <div id="calc-result" style="font-size: 1.4rem; font-weight: bold; color: var(--primary-green); padding-top: 8px;">₹ 600 - ₹ 800</div>
-                </div>
-            </div>
-        </div>
-
         <!-- Customer FAQs -->
-        <h2 class="section-title" style="margin-top: 2rem;">Frequently Asked Questions</h2>
+        <h2 class="section-title" style="margin-top: 2.5rem;">Frequently Asked Questions</h2>
         <div class="faq-item">
             <button class="faq-btn" onclick="toggleFaq(this)">Are your drivers police verified? <i class="fa-solid fa-chevron-down"></i></button>
             <div class="faq-content">Yes, 100% of our drivers undergo complete background checks, police verification, and driving skills evaluations before joining our roster.</div>
@@ -547,9 +499,16 @@
         </div>
     </div>
 
-    <!-- PAGE: OFFERS (HIDDEN UNLESS OFFERS PRESENT) -->
+    <!-- PAGE: REQUIREMENTS (HIDDEN UNLESS ADDED IN ADMIN) -->
+    <div id="page-reqs" class="page-content">
+        <h2 class="section-title">Current Urgent Requirements & Broadcasts</h2>
+        <p>Live active driver requirements updated directly from our management desk.</p>
+        <div class="grid-3" id="reqs-container"></div>
+    </div>
+
+    <!-- PAGE: OFFERS (HIDDEN UNLESS ADDED IN ADMIN) -->
     <div id="page-offers" class="page-content">
-        <h2 class="section-title">Active Special Offers</h2>
+        <h2 class="section-title">Active Special Offers & Promotions</h2>
         <p>Exclusive deals updated regularly from our management desk.</p>
         <div class="grid-3" id="offers-container"></div>
     </div>
@@ -666,36 +625,50 @@
             }, 600);
         });
 
-        // Realtime Firebase Listener across all Admin sections
+        // Realtime Firebase Listener
         function syncRealtimeWebsiteData() {
-            // 1. Requirements Broadcast Sync
+            // 1. Dynamic Requirements Tab with Red Badge Counter
             database.ref('requirements').on('value', snapshot => {
-                const reqAlert = document.getElementById('home-req-alert');
+                const reqTab = document.getElementById('nav-reqs');
+                const reqBadge = document.getElementById('req-badge');
+                const reqContainer = document.getElementById('reqs-container');
                 const data = snapshot.val();
+
                 if (data && Object.keys(data).length > 0) {
-                    const lastKey = Object.keys(data)[Object.keys(data).length - 1];
-                    const lastReq = data[lastKey];
-                    reqAlert.style.display = 'block';
-                    document.getElementById('req-alert-desc').innerText = `${lastReq.title} (${lastReq.location}): ${lastReq.note}`;
+                    const keys = Object.keys(data);
+                    reqBadge.innerText = keys.length;
+                    reqTab.style.display = 'inline-flex';
+
+                    reqContainer.innerHTML = keys.map(k => {
+                        const r = data[k];
+                        return `
+                            <div class="card card-body" style="border-top-color: var(--badge-red);">
+                                <span class="price-badge" style="background:#fef2f2; border-color:var(--badge-red); color:var(--badge-red);">
+                                    <i class="fa-solid fa-location-dot"></i> ${r.location}
+                                </span>
+                                <h3 class="card-title" style="margin-top:8px;">${r.title}</h3>
+                                <p style="margin: 10px 0; color:#334155;">${r.note}</p>
+                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Apply / Respond Requirement</button>
+                            </div>
+                        `;
+                    }).join('');
                 } else {
-                    reqAlert.style.display = 'none';
+                    reqTab.style.display = 'none';
+                    reqBadge.innerText = '0';
                 }
             });
 
-            // 2. Offers Sync (Conditional Visibility)
+            // 2. Dynamic Offers Tab with Red Badge Counter
             database.ref('staff_offers').on('value', snapshot => {
                 const offerTab = document.getElementById('nav-offers');
-                const offerAlert = document.getElementById('home-offer-alert');
+                const offerBadge = document.getElementById('offer-badge');
                 const offerContainer = document.getElementById('offers-container');
                 const data = snapshot.val();
 
                 if (data && Object.keys(data).length > 0) {
                     const keys = Object.keys(data);
-                    const firstOffer = data[keys[0]];
-
-                    offerTab.style.display = 'inline-block';
-                    offerAlert.style.display = 'flex';
-                    document.getElementById('offer-alert-desc').innerText = `${firstOffer.title}: ${firstOffer.desc}`;
+                    offerBadge.innerText = keys.length;
+                    offerTab.style.display = 'inline-flex';
 
                     offerContainer.innerHTML = keys.map(k => {
                         const off = data[k];
@@ -703,14 +676,14 @@
                             <div class="card card-body" style="border-top-color: var(--accent-gold);">
                                 <span class="price-badge"><i class="fa-solid fa-tag"></i> ${off.code}</span>
                                 <h3 class="card-title" style="margin-top:8px;">${off.title}</h3>
-                                <p style="margin: 10px 0;">${off.desc}</p>
-                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Claim Offer</button>
+                                <p style="margin: 10px 0; color:#334155;">${off.desc}</p>
+                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Claim Special Offer</button>
                             </div>
                         `;
                     }).join('');
                 } else {
                     offerTab.style.display = 'none';
-                    offerAlert.style.display = 'none';
+                    offerBadge.innerText = '0';
                 }
             });
 
@@ -810,26 +783,6 @@
                     `;
                 }).join('');
             });
-        }
-
-        function calculateFare() {
-            const type = document.getElementById('calc-type').value;
-            const car = document.getElementById('calc-car').value;
-            let price = "₹ 600 - ₹ 800";
-
-            if (type === 'local') {
-                if (car === 'suv') price = "₹ 800 - ₹ 1,000";
-                if (car === 'luxury') price = "₹ 1,500 - ₹ 2,000";
-            } else if (type === 'full') {
-                price = "₹ 1,200 - ₹ 1,500";
-                if (car === 'suv') price = "₹ 1,500 - ₹ 1,800";
-                if (car === 'luxury') price = "₹ 2,500 - ₹ 3,500";
-            } else if (type === 'outstation') {
-                price = "₹ 1,800 / Day + Food Allowance";
-                if (car === 'suv') price = "₹ 2,200 / Day + Food Allowance";
-                if (car === 'luxury') price = "₹ 4,000 / Day + Food Allowance";
-            }
-            document.getElementById('calc-result').innerText = price;
         }
 
         function toggleFaq(btn) {
