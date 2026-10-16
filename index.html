@@ -3,624 +3,878 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anyway Anywhere Anytime Driver | Mumbai's Premium Driver Service</title>
-    <!-- Google Search Result Logo (Favicon) -->
-<link rel="icon" type="image/png" sizes="32x32" href="AAA logo.png">
-<link rel="icon" type="image/png" sizes="16x16" href="AAA logo.png">
-<link rel="apple-touch-icon" sizes="180x180" href="AAA logo.png">
-    <!-- Browser Tab Logo (Favicon) -->
-<link rel="icon" type="image/png" href="AAA logo.png">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Search Engine ko Website Name batane ke liye JSON-LD -->
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Anyway Anywhere Anytime Drivers",
-  "alternateName": ["AAA Drivers", "Anyway Anywhere Anytime Driver"],
-  "url": "https://ibupathan4545-byte.github.io/Anyway-Anywhere-Anytime-Driver./"
-}
-</script>
+    <title>Anyway Anywhere Anytime Drivers | Founded by Bilal Abdul Hamid Hamdare</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f12;
-            --card-bg: #1a1a24;
-            --primary-gold: #ffb703;
-            --text-light: #ffffff;
-            --text-gray: #a0a0aa;
+            --primary-green: #0a3a2a;
+            --secondary-green: #124e38;
+            --accent-gold: #d4af37;
+            --gold-hover: #c5a028;
+            --bg-white: #fafafa;
+            --card-white: #ffffff;
+            --text-dark: #1f2937;
+            --text-light: #6b7280;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-            scroll-behavior: smooth;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-light);
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
             overflow-x: hidden;
         }
 
-        /* Header / Navbar */
-        header {
+        /* Full Page Loader */
+        #loading-screen {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(15, 15, 18, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 20px 5%;
+            height: 100%;
+            background-color: var(--primary-green);
+            z-index: 9999;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 183, 3, 0.1);
+            justify-content: center;
+            color: white;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
         }
 
-        .logo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary-gold);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
         }
 
-        .logo span {
-            color: #fff;
-        }
-
-        .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            margin-left: 25px;
-            font-weight: 400;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-gold);
-        }
-
-        /* Hero Section + Booking Form Overlay */
-        .hero-container {
-            min-height: 100vh;
-            padding: 120px 5% 60px 5%;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: space-between;
-            gap: 40px;
-            background: radial-gradient(circle at top right, rgba(255, 183, 3, 0.05), transparent);
-        }
-
-        .hero-text {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .hero-text h1 {
-            font-size: 3.5rem;
-            line-height: 1.2;
-            margin-bottom: 20px;
-            font-weight: 700;
-        }
-
-        .hero-text h1 span {
-            color: var(--primary-gold);
-        }
-
-        .hero-text p {
-            color: var(--text-gray);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
-        .feat-item {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .feat-item i {
-            color: var(--primary-gold);
-            font-size: 1.5rem;
-        }
-
-        /* Form Styling */
-        .booking-box {
-            flex: 1;
-            min-width: 350px;
-            background: var(--card-bg);
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 183, 3, 0.2);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .booking-box h2 {
+        .loader-logo {
             font-size: 1.8rem;
-            margin-bottom: 25px;
+            font-weight: bold;
+            color: var(--accent-gold);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
             text-align: center;
         }
 
-        .booking-box h2 span {
-            color: var(--primary-gold);
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top: 4px solid var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-            position: relative;
+        #page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: transparent;
+            z-index: 2000;
         }
 
-        .form-group i {
-            position: absolute;
-            left: 15px;
-            top: 43px;
-            color: var(--primary-gold);
-        }
-
-        .form-group label {
+        #page-loader.active::before {
+            content: '';
             display: block;
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            color: var(--text-gray);
+            height: 100%;
+            background: var(--accent-gold);
+            animation: pageLoading 0.4s linear;
         }
 
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 12px 12px 12px 45px;
-            background: #252533;
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 1rem;
-            transition: 0.3s;
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pageLoading { 0% { width: 0%; } 100% { width: 100%; } }
+
+        /* Header & Navigation */
+        header {
+            background-color: var(--primary-green);
+            border-bottom: 3px solid var(--accent-gold);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
 
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: var(--primary-gold);
-            box-shadow: 0 0 10px rgba(255, 183, 3, 0.2);
-        }
-
-        .form-row {
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary-gold);
-            color: #000;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-decoration: none;
             display: flex;
-            justify-content: center;
             align-items: center;
             gap: 10px;
         }
 
-        .btn-submit:hover {
-            background: #e6a500;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(255, 183, 3, 0.3);
+        .logo span { color: var(--accent-gold); }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 0.8rem;
+            flex-wrap: wrap;
         }
 
-        /* Footer */
-        footer {
+        nav a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 0.8rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent-gold);
+            background: rgba(212, 175, 55, 0.12);
+            border-bottom: 2px solid var(--accent-gold);
+        }
+
+        /* Offers Tab Hidden By Default */
+        .offer-tab {
+            display: none;
+            background: var(--accent-gold);
+            color: var(--primary-green) !important;
+            font-weight: bold !important;
+            border-radius: 20px;
+        }
+
+        .page-content {
+            display: none;
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+
+        .page-content.active-page {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(10, 58, 42, 0.88), rgba(10, 58, 42, 0.88)), url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1200&q=80') center/cover;
+            color: white;
             text-align: center;
-            padding: 30px;
-            background: #0a0a0d;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: var(--text-gray);
-            font-size: 0.9rem;
+            padding: 4rem 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--accent-gold);
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
 
-        /* Responsive Settings */
-        @media (max-width: 968px) {
-            .hero-text h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } /* Mobile me burger menu bad me add ho sakta hai */
+        .hero h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+        .hero h1 span { color: var(--accent-gold); }
+        .hero p { font-size: 1.1rem; margin-bottom: 2rem; color: #e5e7eb; }
+
+        /* Conditional Offer Alert Banner (Hidden by Default) */
+        .offer-alert-banner {
+            display: none;
+            background: linear-gradient(135deg, var(--accent-gold), #fff3b0);
+            color: var(--primary-green);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid var(--primary-green);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        /* ---- DRIVER PROFILES & REVIEWS STYLING ---- */
-.reviews-section {
-    padding: 80px 5%;
-    background: #13131a;
-    text-align: center;
-}
-.reviews-section h2 {
-    font-size: 2.5rem;
-    margin-bottom: 40px;
-}
-.reviews-section h2 span { color: var(--primary-gold); }
-.drivers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 30px;
-}
-.driver-card {
-    background: var(--card-bg);
-    border: 1px solid rgba(255, 183, 3, 0.1);
-    padding: 30px;
-    border-radius: 15px;
-    transition: 0.3s;
-}
-.driver-card:hover { transform: translateY(-5px); border-color: var(--primary-gold); }
-.driver-img {
-    width: 80px; height: 80px;
-    background: #252533;
-    border-radius: 50%;
-    margin: 0 auto 15px auto;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2rem; color: var(--primary-gold);
-}
-.rating-stars { color: var(--primary-gold); margin: 10px 0; }
 
-/* ---- SECRET ADMIN DASHBOARD STYLING ---- */
-.admin-trigger-zone {
-    padding: 20px; text-align: center; background: #0a0a0d;
-}
-.btn-admin-login {
-    background: transparent; color: var(--text-gray); border: 1px dashed rgba(255,255,255,0.2);
-    padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.8rem;
-}
-.btn-admin-login:hover { color: var(--primary-gold); border-color: var(--primary-gold); }
-.admin-dashboard {
-    display: none; padding: 60px 5%; background: #0f0f12; border-top: 3px solid var(--primary-gold);
-}
-.admin-header {
-    display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;
-}
-.admin-table-wrapper { overflow-x: auto; }
-.admin-table {
-    width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 10px; overflow: hidden;
-}
-.admin-table th, .admin-table td {
-    padding: 15px; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.05);
-}
-.admin-table th { background: #252533; color: var(--primary-gold); }
-.admin-table tr:hover { background: rgba(255,183,3,0.02); }
-.btn-danger {
-    background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;
-}
-.btn-danger:hover { background: #dc2626; }
-    /* ---- PREMIUM WELCOME SCREEN STYLING ---- */
-#welcome-screen {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background-color: #0f0f12;
-    z-index: 99999; /* Sabse upar dikhane ke liye */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: opacity 0.6s ease-out, visibility 0.6s;
-}
+        /* Requirements Alert Bar */
+        .req-alert-banner {
+            display: none;
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--accent-gold);
+        }
 
-.welcome-content {
-    text-align: center;
-}
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
 
-.welcome-logo {
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: var(--primary-gold);
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    animation: fadeInDown 1s ease-out;
-}
+        .btn-gold {
+            background-color: var(--accent-gold);
+            color: var(--primary-green);
+        }
 
-.welcome-sub {
-    font-size: 1.5rem;
-    color: #ffffff;
-    font-weight: 400;
-    letter-spacing: 1px;
-    margin-top: -5px;
-    animation: fadeInUp 1s ease-out 0.3s backwards;
-}
+        .btn-gold:hover {
+            background-color: var(--gold-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+        }
 
-.mumbai-tag {
-    font-size: 0.9rem;
-    color: var(--text-gray);
-    margin-top: 15px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    animation: fadeInUp 1s ease-out 0.6s backwards;
-}
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
 
-/* Elegant Loading Line Animation */
-.loader-bar {
-    width: 200px;
-    height: 3px;
-    background: rgba(255, 255, 255, 0.1);
-    margin: 30px auto 0 auto;
-    border-radius: 5px;
-    overflow: hidden;
-}
+        .card {
+            background: var(--card-white);
+            border: 1px solid #e5e7eb;
+            border-top: 4px solid var(--primary-green);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
 
-.loader-progress {
-    width: 0%;
-    height: 100%;
-    background: var(--primary-gold);
-    box-shadow: 0 0 10px var(--primary-gold);
-    animation: loadProgress 2s linear forwards;
-}
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 20px -3px rgba(0,0,0,0.12);
+            border-top-color: var(--accent-gold);
+        }
 
-/* Animations Keyframes */
-@keyframes fadeInDown {
-    from { opacity: 0; transform: translateY(-30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        .card-img { width: 100%; height: 200px; object-fit: cover; }
+        .card-body { padding: 1.5rem; }
+        .card-title { color: var(--primary-green); font-size: 1.3rem; margin-bottom: 0.5rem; }
 
-@keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+        .price-badge {
+            display: inline-block;
+            background-color: rgba(212, 175, 55, 0.15);
+            color: var(--primary-green);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: bold;
+            border: 1px solid var(--accent-gold);
+            margin: 0.5rem 0;
+        }
 
-@keyframes loadProgress {
-    to { width: 100%; }
-}
+        .empty-state {
+            text-align: center;
+            padding: 3.5rem 1rem;
+            background: var(--card-white);
+            border-radius: 8px;
+            border: 2px dashed #d1d5db;
+            color: var(--text-light);
+            grid-column: 1 / -1;
+        }
 
-/* Fade out class for smooth exit */
-.fade-out {
-    opacity: 0;
-    visibility: hidden;
-}
+        .empty-state i { font-size: 3.2rem; color: var(--accent-gold); margin-bottom: 1rem; }
+
+        .section-title {
+            color: var(--primary-green);
+            border-bottom: 2px solid var(--accent-gold);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Live Widget Counter */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            background: var(--primary-green);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            margin: 2rem 0;
+            border: 1px solid var(--accent-gold);
+        }
+
+        .stats-item h3 { font-size: 1.8rem; color: var(--accent-gold); }
+        .stats-item p { font-size: 0.9rem; margin-top: 4px; }
+
+        /* Calculator Card */
+        .calc-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border-top: 4px solid var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            margin: 2rem 0;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: white;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+
+        .faq-btn {
+            width: 100%;
+            padding: 1rem;
+            text-align: left;
+            background: transparent;
+            border: none;
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--primary-green);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-content {
+            display: none;
+            padding: 1rem;
+            border-top: 1px solid #f3f4f6;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            background: #fafafa;
+        }
+
+        /* Forms */
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: var(--primary-green); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;
+        }
+
+        footer {
+            background-color: var(--primary-green);
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: auto;
+            border-top: 3px solid var(--accent-gold);
+        }
+
+        .whatsapp-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 2px 4px 12px rgba(0,0,0,0.3);
+            text-decoration: none;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .whatsapp-btn:hover { transform: scale(1.1); }
     </style>
 </head>
 <body>
-    <div id="welcome-screen">
-    <div class="welcome-content">
-        <div class="welcome-logo">Anyway</div>
-        <div class="welcome-sub">Anywhere Anytime Driver</div>
-        <div class="mumbai-tag">Mumbai's 24/7 Chauffeur Service</div>
-        <div class="loader-bar"><div class="loader-progress"></div></div>
-    </div>
-</div>
 
+    <!-- Full Page Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader-logo">
+            <i class="fa-solid fa-steering-wheel"></i> ANYWAY ANYWHERE ANYTIME DRIVERS
+        </div>
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Micro Switch Loader -->
+    <div id="page-loader"></div>
+
+    <!-- Header -->
     <header>
-        <div class="logo">Anyway <span>Anywhere Anytime</span></div>
-        <nav class="nav-links">
-            <a href="#home">Home</a>
-            <a href="#book">Book Driver</a>
-            <a href="tel:+919420184273" style="color: var(--primary-gold); font-weight: 600;"><i class="fa-solid fa-phone"></i> Emergency Call</a>
-        </nav>
+        <div class="nav-container">
+            <a href="#" class="logo" onclick="switchPage('home')">
+                <i class="fa-solid fa-steering-wheel"></i> ANYWAY ANYWHERE ANYTIME <span>DRIVERS</span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#" id="nav-home" class="active" onclick="switchPage('home')">Home</a></li>
+                    <li><a href="#" id="nav-offers" class="offer-tab" onclick="switchPage('offers')"><i class="fa-solid fa-gift"></i> Offers</a></li>
+                    <li><a href="#" id="nav-about" onclick="switchPage('about')">About Us</a></li>
+                    <li><a href="#" id="nav-drivers" onclick="switchPage('drivers')">Hire Drivers</a></li>
+                    <li><a href="#" id="nav-rentals" onclick="switchPage('rentals')">Car Rentals</a></li>
+                    <li><a href="#" id="nav-cars" onclick="switchPage('cars')">Buy Used Cars</a></li>
+                    <li><a href="#" id="nav-contact" onclick="switchPage('contact')">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <section class="hero-container" id="home">
-        <div class="hero-text">
-            <h1>Premium Driver Services in <span>Mumbai</span>, Available 24/7.</h1>
-            <p>Whether it's late-night parties, outstation road trips, or daily traffic rushes—hire professional, verified corporate-grade drivers instantly.</p>
-            
-            <div class="features-grid">
-                <div class="feat-item">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <div>
-                        <h4>100% Verified</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-gray);">Background checked pros</p>
-                    </div>
+    <!-- PAGE 1: HOME -->
+    <div id="page-home" class="page-content active-page">
+        <!-- Conditional Offer Alert Banner (Hidden by default) -->
+        <div id="home-offer-alert" class="offer-alert-banner">
+            <div>
+                <strong id="offer-alert-title"><i class="fa-solid fa-bullhorn"></i> Special Offer Available!</strong>
+                <p id="offer-alert-desc" style="font-size: 0.95rem; margin-top: 4px;"></p>
+            </div>
+            <button class="btn btn-gold" onclick="switchPage('offers')">View Offer</button>
+        </div>
+
+        <!-- Requirements Alert Banner -->
+        <div id="home-req-alert" class="req-alert-banner">
+            <strong id="req-alert-title" style="color: var(--accent-gold); font-size: 1.05rem;"><i class="fa-solid fa-bell"></i> Current Live Requirement Broadcast:</strong>
+            <p id="req-alert-desc" style="font-size: 0.95rem; margin-top: 5px; color: #e2e8f0;"></p>
+        </div>
+
+        <div class="hero">
+            <h1>Anyway Anywhere Anytime <span>Drivers</span></h1>
+            <p>Reliable Chauffeurs | Rental Cars | Certified Pre-Owned Vehicles</p>
+            <button class="btn btn-gold" onclick="switchPage('drivers')">Book a Driver Now</button>
+        </div>
+
+        <!-- Live Stats & Trust Bar -->
+        <div class="stats-bar">
+            <div class="stats-item">
+                <h3><i class="fa-solid fa-user-shield"></i> 100%</h3>
+                <p>Verified Chauffeurs</p>
+            </div>
+            <div class="stats-item">
+                <h3><i class="fa-solid fa-clock"></i> 24 / 7</h3>
+                <p>Instant Dispatch</p>
+            </div>
+            <div class="stats-item">
+                <h3><i class="fa-solid fa-star"></i> 4.9 / 5</h3>
+                <p>Customer Happiness Rating</p>
+            </div>
+            <div class="stats-item">
+                <h3><i class="fa-solid fa-car-side"></i> 15 Min</h3>
+                <p>Average Arrival Time</p>
+            </div>
+        </div>
+
+        <h2 class="section-title">Our Core Services</h2>
+        <div class="grid-3">
+            <div class="card">
+                <div class="card-body">
+                    <i class="fa-solid fa-user-tie fa-2x" style="color: var(--accent-gold);"></i>
+                    <h3 class="card-title" style="margin-top: 10px;">Professional Drivers</h3>
+                    <p>Verified drivers anytime you need, anywhere you travel.</p>
+                    <br>
+                    <button class="btn btn-gold" onclick="switchPage('drivers')">Hire Driver</button>
                 </div>
-                <div class="feat-item">
-                    <i class="fa-solid fa-clock"></i>
-                    <div>
-                        <h4>Anytime Support</h4>
-                        <p style="font-size: 0.85rem; color: var(--text-gray);">Arrives within 30 mins</p>
-                    </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <i class="fa-solid fa-car fa-2x" style="color: var(--accent-gold);"></i>
+                    <h3 class="card-title" style="margin-top: 10px;">Car Rentals</h3>
+                    <p>Rental cars available on demand for short & long journeys.</p>
+                    <br>
+                    <button class="btn btn-gold" onclick="switchPage('rentals')">Rent a Car</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <i class="fa-solid fa-handshake fa-2x" style="color: var(--accent-gold);"></i>
+                    <h3 class="card-title" style="margin-top: 10px;">2nd Hand Cars</h3>
+                    <p>Quality tested pre-owned vehicles ready for immediate sale.</p>
+                    <br>
+                    <button class="btn btn-gold" onclick="switchPage('cars')">View Cars</button>
                 </div>
             </div>
         </div>
 
-        <div class="booking-box" id="book">
-            <h2><span>Book Your</span> Driver Now</h2>
-            <form id="driverBookingForm">
-                
+        <!-- Interactive Instant Driver Cost Estimator -->
+        <div class="calc-box">
+            <h3 style="color: var(--primary-green); margin-bottom: 1rem;"><i class="fa-solid fa-calculator" style="color: var(--accent-gold);"></i> Quick Ride Fare Estimator</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                 <div class="form-group">
-                    <label>Full Name</label>
-                    <i class="fa-solid fa-user"></i>
-                    <input type="text" id="custName" placeholder="Enter your name" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Mobile Number</label>
-                    <i class="fa-solid fa-phone"></i>
-                    <input type="tel" id="custPhone" placeholder="Enter mobile number" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Pickup Location (Mumbai)</label>
-                    <i class="fa-solid fa-location-dot"></i>
-                    <input type="text" id="pickupLoc" placeholder="e.g., Bandra West, Andheri" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group" style="flex: 1;">
-                        <label>Date</label>
-                        <i class="fa-solid fa-calendar-days"></i>
-                        <input type="date" id="bookDate" required>
-                    </div>
-                    <div class="form-group" style="flex: 1;">
-                        <label>Time</label>
-                        <i class="fa-solid fa-clock"></i>
-                        <input type="time" id="bookTime" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Service Requirement</label>
-                    <i class="fa-solid fa-car"></i>
-                    <select id="serviceType">
-                        <option value="Hourly Basis (Local)">Hourly Basis (Local)</option>
-                        <option value="Outstation Trip">Outstation Trip</option>
-                        <option value="Night Party Return">Night Party Return</option>
-                        <option value="Monthly Contract">Monthly Contract</option>
+                    <label>Ride Type</label>
+                    <select id="calc-type" onchange="calculateFare()">
+                        <option value="local">Local City Trip (4 Hours)</option>
+                        <option value="full">Full Day Local (8 Hours)</option>
+                        <option value="outstation">Outstation Trip (Per Day)</option>
                     </select>
                 </div>
-       <div class="form-group">
-        <label>Vehicle Type</label>
-    <i class="fa-solid fa-car-side"></i>
-    <select id="vehicleType" required>
-        <option value="">-- Select Vehicle Type --</option>
-        <option value="Hatchback (Alto, WagonR, Swift, etc.)">Hatchback (Alto, WagonR, Swift, etc.)</option>
-        <option value="Sedan (Dzire, City, Verna, Virtus, etc.)">Sedan (Dzire, City, Verna, Virtus, etc.)</option>
-        <option value="SUV / Compact SUV (Nexon, Creta, Thar, Scorpio, etc.)">SUV / Compact SUV (Nexon, Creta, Thar, etc.)</option>
-        <option value="MUV / 7-Seater (Ertiga, Innova, Carens, etc.)">MUV / 7-Seater (Ertiga, Innova, Carens, etc.)</option>
-        <option value="Luxury Segment (Mercedes, BMW, Audi, etc.)">Luxury Segment (Mercedes, BMW, Audi, etc.)</option>
-    </select>
-</div>
-                <button type="submit" class="btn-submit">
-                    <i class="fa-brands fa-whatsapp"></i> Confirm & Book Driver
-                </button>
-            </form>
-        </div>
-    </section>
-<!-- 1. DRIVER PROFILES & REVIEWS SECTION (Publicly Visible) -->
-    <section class="reviews-section">
-        <h2>Our <span>Top Rated</span> Drivers</h2>
-        <div class="drivers-grid">
-            <!-- Driver 1 -->
-            <div class="driver-card">
-                <div class="driver-img"><i class="fa-solid fa-user-tie"></i></div>
-                <h3>Ramesh Kumar</h3>
-                <p style="color: var(--primary-gold); font-size: 0.85rem;">Exp: 8+ Years (Manual/Automatic)</p>
-                <div class="rating-stars">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+                <div class="form-group">
+                    <label>Car Category</label>
+                    <select id="calc-car" onchange="calculateFare()">
+                        <option value="hatch">Hatchback / Sedan</option>
+                        <option value="suv">SUV / MUV (Innova)</option>
+                        <option value="luxury">Luxury Segment (BMW / Audi / Benz)</option>
+                    </select>
                 </div>
-                <p style="font-size: 0.9rem; color: var(--text-gray);">"Very punctual. Safely drove my Mercedes from South Mumbai to Thane in heavy rain."</p>
-                <span style="font-size: 0.8rem; display:block; margin-top:10px; color:#6b7280;">- Mukesh A. (CEO)</span>
-            </div>
-            
-            <!-- Driver 2 -->
-            <div class="driver-card">
-                <div class="driver-img"><i class="fa-solid fa-user-tie"></i></div>
-                <h3>Sandeep Shinde</h3>
-                <p style="color: var(--primary-gold); font-size: 0.85rem;">Exp: 5+ Years (Luxury Cars Expert)</p>
-                <div class="rating-stars">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-regular fa-star-half-stroke"></i>
+                <div class="form-group">
+                    <label>Estimated Driver Fare</label>
+                    <div id="calc-result" style="font-size: 1.4rem; font-weight: bold; color: var(--primary-green); padding-top: 8px;">₹ 600 - ₹ 800</div>
                 </div>
-                <p style="font-size: 0.9rem; color: var(--text-gray);">"Best option for night parties. Professional behavior and perfect route knowledge."</p>
-                <span style="font-size: 0.8rem; display:block; margin-top:10px; color:#6b7280;">- Rohan S.</span>
             </div>
         </div>
-    </section>
 
-    <!-- SECRET LOGIN BUTTON AREA (Footer ke thik upar chota sa hidden trigger) -->
-    <div class="admin-trigger-zone">
-        <button class="btn-admin-login" onclick="accessAdminPanel()"><i class="fa-solid fa-lock"></i> Staff Login</button>
+        <!-- Customer FAQs -->
+        <h2 class="section-title" style="margin-top: 2rem;">Frequently Asked Questions</h2>
+        <div class="faq-item">
+            <button class="faq-btn" onclick="toggleFaq(this)">Are your drivers police verified? <i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-content">Yes, 100% of our drivers undergo complete background checks, police verification, and driving skills evaluations before joining our roster.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-btn" onclick="toggleFaq(this)">How fast can I get a driver? <i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-content">Our average dispatch time is within 15 to 30 minutes in major city limits.</div>
+        </div>
+        <div class="faq-item">
+            <button class="faq-btn" onclick="toggleFaq(this)">Can I hire a driver for outstation trips? <i class="fa-solid fa-chevron-down"></i></button>
+            <div class="faq-content">Yes, we provide specialized highway and outstation drivers for round trips and long-distance travel.</div>
+        </div>
     </div>
 
-    <!-- 2. SECRET ADMIN DASHBOARD (Hidden by Default) -->
-    <section class="admin-dashboard" id="adminPanel">
-        <div class="admin-header">
-            <h2><i class="fa-solid fa-gauge"></i> Live Booking <span>Database</span></h2>
-            <button class="btn-submit" style="width:auto; margin:0; padding:10px 20px; background:#ef4444; color:#fff;" onclick="logoutAdmin()">Logout</button>
+    <!-- PAGE: OFFERS (HIDDEN UNLESS OFFERS PRESENT) -->
+    <div id="page-offers" class="page-content">
+        <h2 class="section-title">Active Special Offers</h2>
+        <p>Exclusive deals updated regularly from our management desk.</p>
+        <div class="grid-3" id="offers-container"></div>
+    </div>
+
+    <!-- PAGE 2: ABOUT US -->
+    <div id="page-about" class="page-content">
+        <h2 class="section-title">About Our Agency</h2>
+        <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+            Welcome to <strong>Anyway Anywhere Anytime Drivers</strong>. Founded by <strong>Bilal Abdul Hamid Hamdare</strong>, our agency is built on total reliability, driving expertise, and premium customer convenience.
+        </p>
+
+        <div class="grid-3">
+            <div class="card card-body">
+                <h3 class="card-title"><i class="fa-solid fa-user-check" style="color: var(--accent-gold);"></i> Founder's Vision</h3>
+                <p>Founded by Bilal Abdul Hamid Hamdare with a vision to provide safe, highly trained, and trustworthy drivers for every type of luxury and commercial vehicle.</p>
+            </div>
+            <div class="card card-body">
+                <h3 class="card-title"><i class="fa-solid fa-shield-halved" style="color: var(--accent-gold);"></i> Verified Drivers</h3>
+                <p>Thorough background check, police verification, and driving skills evaluation for all chauffeurs.</p>
+            </div>
+            <div class="card card-body">
+                <h3 class="card-title"><i class="fa-solid fa-clock" style="color: var(--accent-gold);"></i> 24/7 Availability</h3>
+                <p>True to our name: Services available Anyway, Anywhere, Anytime.</p>
+            </div>
         </div>
-        
-        <div class="admin-table-wrapper">
-            <table class="admin-table">
-                <thead>
-                    <tr>
-                        <th>Customer</th>
-                        <th>Contact</th>
-                        <th>Pickup</th>
-                        <th>Date & Time</th>
-                        <th>Vehicle Type</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="adminTableBody">
-                    <!-- Data Javascript ke through yahan automatic load hogi -->
-                </tbody>
-            </table>
+    </div>
+
+    <!-- PAGE 3: DRIVERS -->
+    <div id="page-drivers" class="page-content">
+        <h2 class="section-title">Hire Experienced Drivers</h2>
+        <p>Book professional drivers for personal, outstation, or commercial driving.</p>
+        <div class="grid-3" id="drivers-container"></div>
+    </div>
+
+    <!-- PAGE 4: RENTALS -->
+    <div id="page-rentals" class="page-content">
+        <h2 class="section-title">Car Rental Options</h2>
+        <p>Available cars for rental will show up here once listed by staff.</p>
+        <div class="grid-3" id="rentals-container"></div>
+    </div>
+
+    <!-- PAGE 5: BUY USED CARS -->
+    <div id="page-cars" class="page-content">
+        <h2 class="section-title">2nd Hand Cars for Sale</h2>
+        <p>Second-hand vehicles available for sale.</p>
+        <div class="grid-3" id="sale-cars-container"></div>
+    </div>
+
+    <!-- PAGE 6: CONTACT -->
+    <div id="page-contact" class="page-content">
+        <h2 class="section-title">Contact Us</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+            <div>
+                <h3>Anyway Anywhere Anytime Drivers</h3>
+                <p style="color: var(--accent-gold); font-weight: bold; margin-bottom: 1rem;">Founder: Bilal Abdul Hamid Hamdare</p>
+                <p><i class="fa-solid fa-location-dot" style="color: var(--accent-gold);"></i> Head Office, City Center</p><br>
+                <p><i class="fa-solid fa-phone" style="color: var(--accent-gold);"></i> +91 98765 43210</p><br>
+                <p><i class="fa-solid fa-envelope" style="color: var(--accent-gold);"></i> contact@aaadrivers.com</p>
+            </div>
+
+            <div class="card card-body">
+                <h3>Send Booking Inquiry</h3><br>
+                <form id="inquiryForm" onsubmit="handleInquiry(event)">
+                    <div class="form-group">
+                        <label>Your Name</label>
+                        <input type="text" required placeholder="Enter Name">
+                    </div>
+                    <div class="form-group">
+                        <label>Mobile Number</label>
+                        <input type="tel" required placeholder="Enter Phone Number">
+                    </div>
+                    <div class="form-group">
+                        <label>Service Type</label>
+                        <select required>
+                            <option value="driver">Hire Driver</option>
+                            <option value="rental">Car Rental</option>
+                            <option value="buy">Buy 2nd Hand Car</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gold" style="width:100%;">Submit Request</button>
+                </form>
+            </div>
         </div>
-    </section>
+    </div>
+
+    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Anyway Anywhere Anytime Driver Services Mumbai. All Rights Reserved.</p>
-        <!-- DRIVER PORTAL LINK IN FOOTER -->
-<div style="text-align: center; padding: 20px; background: #0f0f12; border-top: 1px solid #222;">
-    <p style="color: #9ca3af; font-size: 0.9rem;">
-        Are you a professional chauffeur? 
-        <a href="driver.html" style="color: #f4c430; text-decoration: none; font-weight: bold; margin-left: 5px;">
-            Join as a Driver Partner &rarr;
-        </a>
-    </p>
-</div>
+        <p>&copy; 2026 Anyway Anywhere Anytime Drivers. All Rights Reserved.</p>
+        <p style="font-size: 0.85rem; color: var(--accent-gold); margin-top: 5px;">Founder: Bilal Abdul Hamid Hamdare</p>
     </footer>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <a href="https://wa.me/919876543210" class="whatsapp-btn" target="_blank" title="Chat on WhatsApp">
+        <i class="fa-brands fa-whatsapp"></i>
+    </a>
 
-<script>
-    // 1. Firebase Initialize Karna
-    const firebaseConfig = {
-        apiKey: "AIzaSyATPZ67xkIx_2dPWiFH1oa3AM", 
-        authDomain: "anywaydriver.firebaseapp.com",
-        databaseURL: "https://anywaydriver-default-rtdb.firebaseio.com",
-        projectId: "anywaydriver",
-        storageBucket: "anywaydriver.appspot.com",
-    };
-    
-    // Initialize Firebase
-    firebase.initializeApp(firebaseConfig);
-    const database = firebase.database();
+    <!-- FIREBASE REALTIME SYNC SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-    // 2. Handle Form Submission (Push to Internet Cloud)
-    document.getElementById('driverBookingForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const bookingData = {
-            name: document.getElementById('custName').value,
-            phone: document.getElementById('custPhone').value,
-            pickup: document.getElementById('pickupLoc').value,
-            date: document.getElementById('bookDate').value,
-            time: document.getElementById('bookTime').value,
-            service: document.getElementById('serviceType').value,
-            vehicleType: document.getElementById('vehicleType').value,
-            driverStatus: "AVAILABLE", 
-            acceptedBy: ""
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBpErNLGb_hVRuMfDnwMKvhYhEGyZWxugs",
+            authDomain: "aaa-drives.firebaseapp.com",
+            databaseURL: "https://aaa-drives-default-rtdb.firebaseio.com/",
+            projectId: "aaa-drives",
+            storageBucket: "aaa-drives.firebasestorage.app",
         };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
 
-        // Firebase Realtime Database mein unique ID ke sath save karna (.push())
-        database.ref('bookings').push(bookingData)
-            .then(() => {
-                alert("Booking Submitted Online! Drivers across Mumbai will see your ride now.");
-                document.getElementById('driverBookingForm').reset();
-            })
-            .catch((error) => {
-                console.error("Firebase Error: ", error);
-                alert("Database Connection Error. Try Again!");
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loading-screen').classList.add('hidden');
+            }, 600);
+        });
+
+        // Realtime Firebase Listener across all Admin sections
+        function syncRealtimeWebsiteData() {
+            // 1. Requirements Broadcast Sync
+            database.ref('requirements').on('value', snapshot => {
+                const reqAlert = document.getElementById('home-req-alert');
+                const data = snapshot.val();
+                if (data && Object.keys(data).length > 0) {
+                    const lastKey = Object.keys(data)[Object.keys(data).length - 1];
+                    const lastReq = data[lastKey];
+                    reqAlert.style.display = 'block';
+                    document.getElementById('req-alert-desc').innerText = `${lastReq.title} (${lastReq.location}): ${lastReq.note}`;
+                } else {
+                    reqAlert.style.display = 'none';
+                }
             });
-    });
 
-    // ==========================================
-    // 🔴 INJECTED: LOADING SCREEN REMOVAL LOGIC
-    // ==========================================
-    window.addEventListener('load', () => {
-        // Page load hone par maximum 2.5 seconds ke andar preloader hatega hi hatega
-        setTimeout(() => {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            if (welcomeScreen && !welcomeScreen.classList.contains('fade-out')) {
-                welcomeScreen.classList.add('fade-out');
-                console.log("Welcome screen forced out successfully!");
+            // 2. Offers Sync (Conditional Visibility)
+            database.ref('staff_offers').on('value', snapshot => {
+                const offerTab = document.getElementById('nav-offers');
+                const offerAlert = document.getElementById('home-offer-alert');
+                const offerContainer = document.getElementById('offers-container');
+                const data = snapshot.val();
+
+                if (data && Object.keys(data).length > 0) {
+                    const keys = Object.keys(data);
+                    const firstOffer = data[keys[0]];
+
+                    offerTab.style.display = 'inline-block';
+                    offerAlert.style.display = 'flex';
+                    document.getElementById('offer-alert-desc').innerText = `${firstOffer.title}: ${firstOffer.desc}`;
+
+                    offerContainer.innerHTML = keys.map(k => {
+                        const off = data[k];
+                        return `
+                            <div class="card card-body" style="border-top-color: var(--accent-gold);">
+                                <span class="price-badge"><i class="fa-solid fa-tag"></i> ${off.code}</span>
+                                <h3 class="card-title" style="margin-top:8px;">${off.title}</h3>
+                                <p style="margin: 10px 0;">${off.desc}</p>
+                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Claim Offer</button>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    offerTab.style.display = 'none';
+                    offerAlert.style.display = 'none';
+                }
+            });
+
+            // 3. Drivers Sync
+            database.ref('staff_drivers').on('value', snapshot => {
+                const container = document.getElementById('drivers-container');
+                const data = snapshot.val();
+
+                if (!data) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-id-card"></i>
+                            <h3>Drivers Available On Demand</h3>
+                            <p>Contact us directly to request custom driver booking.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = Object.keys(data).map(k => {
+                    const d = data[k];
+                    return `
+                        <div class="card card-body">
+                            <h3 class="card-title">${d.name}</h3>
+                            <span class="price-badge">${d.exp}</span>
+                            <p style="margin-top: 8px;"><strong>Specialization:</strong> ${d.type}</p>
+                            <p><strong>Description:</strong> ${d.desc || 'N/A'}</p>
+                            <p style="margin-top:5px;"><strong>Status:</strong> ${d.status}</p>
+                            <br>
+                            <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Hire Driver</button>
+                        </div>
+                    `;
+                }).join('');
+            });
+
+            // 4. Rental Cars Sync
+            database.ref('staff_rental_cars').on('value', snapshot => {
+                const container = document.getElementById('rentals-container');
+                const data = snapshot.val();
+
+                if (!data) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-key"></i>
+                            <h3>No Rental Cars Available Right Now</h3>
+                            <p>Available rental cars will be listed here when added by staff.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = Object.keys(data).map(k => {
+                    const car = data[k];
+                    return `
+                        <div class="card">
+                            <img src="${car.img}" class="card-img" alt="${car.title}">
+                            <div class="card-body">
+                                <h3 class="card-title">${car.title}</h3>
+                                <span class="price-badge">${car.price}</span>
+                                <p style="margin-top: 8px;"><strong>Segment:</strong> ${car.type}</p>
+                                <p style="margin-top: 4px; font-size: 0.9rem; color: #4b5563;">${car.desc || 'N/A'}</p>
+                                <br>
+                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Rent Now</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+
+            // 5. Sale Cars Sync
+            database.ref('staff_sale_cars').on('value', snapshot => {
+                const container = document.getElementById('sale-cars-container');
+                const data = snapshot.val();
+
+                if (!data) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fa-solid fa-car-side"></i>
+                            <h3>No Cars Available Right Now</h3>
+                            <p>New second-hand cars will appear here as soon as they are added by staff.</p>
+                        </div>`;
+                    return;
+                }
+
+                container.innerHTML = Object.keys(data).map(k => {
+                    const car = data[k];
+                    return `
+                        <div class="card">
+                            <img src="${car.img}" class="card-img" alt="${car.title}">
+                            <div class="card-body">
+                                <h3 class="card-title">${car.title}</h3>
+                                <span class="price-badge">${car.price}</span>
+                                <p style="margin-top: 8px;"><strong>KM Driven:</strong> ${car.km} | <strong>Fuel:</strong> ${car.fuel}</p>
+                                <p style="margin-top: 4px; font-size: 0.9rem; color: #4b5563;">${car.desc || 'N/A'}</p>
+                                <br>
+                                <button class="btn btn-gold" style="width:100%;" onclick="switchPage('contact')">Book Test Drive</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+
+        function calculateFare() {
+            const type = document.getElementById('calc-type').value;
+            const car = document.getElementById('calc-car').value;
+            let price = "₹ 600 - ₹ 800";
+
+            if (type === 'local') {
+                if (car === 'suv') price = "₹ 800 - ₹ 1,000";
+                if (car === 'luxury') price = "₹ 1,500 - ₹ 2,000";
+            } else if (type === 'full') {
+                price = "₹ 1,200 - ₹ 1,500";
+                if (car === 'suv') price = "₹ 1,500 - ₹ 1,800";
+                if (car === 'luxury') price = "₹ 2,500 - ₹ 3,500";
+            } else if (type === 'outstation') {
+                price = "₹ 1,800 / Day + Food Allowance";
+                if (car === 'suv') price = "₹ 2,200 / Day + Food Allowance";
+                if (car === 'luxury') price = "₹ 4,000 / Day + Food Allowance";
             }
-        }, 2500); 
-    });
-</script>
-</body>
-</html>
+            document.getElementById('calc-result').innerText = price;
+        }
+
+        function toggleFaq(btn) {
+            const content = btn.nextElementSibling;
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+        }
+
+        function switchPage(pageId) {
+            const currentActive = document.querySelector('.page-content.active-page');
+            const targetPage = document.getElementById(`page-${pageId}`);
+            if (!targetPage || currentActive === targetPage) return;
+
+            const pageLoader = document.getElementById('page-loader');
+            pageLoader.classList.add('active');
+            setTimeout(() => pageLoader.classList.remove('active'), 400);
+
+            if (currentActive) {
+                currentActive.style.opacity = '0';
+                currentActive.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    currentActive.classList.remove('active-page');
+                    currentActive.style.transform = 'translateY(15px)';
+
+                    targetPage.classList.add('active-page');
+                    setTimeout(() => {
+                        targetPage.style.opacity = '1';
+                        targetPage.style.transform = 'translateY(0)';
+                    }, 50);
+                }, 200);
+            }
+
+            document.querySelectorAll('nav a').forEach(nav => nav.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${pageId}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleInquiry(e) {
+            e.preventDefault();
+            alert("Thank you! Your request has been received by Anyway Anywhere Anytime Drivers team.");
+        }
+
+        syncRealtimeWebsiteData();
+    </script>
 </body>
 </html>
