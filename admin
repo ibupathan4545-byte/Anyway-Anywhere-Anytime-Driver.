@@ -1,1 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Anyway Anywhere Anytime Drivers</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #0a3a2a;
+            --secondary-green: #124e38;
+            --accent-gold: #d4af37;
+            --gold-hover: #c5a028;
+            --bg-light: #f4f6f8;
+            --white: #ffffff;
+            --danger: #dc2626;
+            --border-color: #e5e7eb;
+            --text-dark: #1f2937;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 1.2rem 2rem;
+            border-bottom: 3px solid var(--accent-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h2 { font-size: 1.3rem; display: flex; align-items: center; gap: 10px; }
+        header h2 span { color: var(--accent-gold); }
+
+        .admin-nav {
+            background: var(--secondary-green);
+            padding: 0.8rem 2rem;
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .nav-tab {
+            background: transparent;
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover, .nav-tab.active-tab {
+            background: var(--accent-gold);
+            color: var(--primary-green);
+            border-color: var(--accent-gold);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .admin-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .admin-section.active-section { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            border-top: 4px solid var(--accent-gold);
+        }
+
+        .card h3 {
+            color: var(--primary-green);
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .input-group { display: flex; flex-direction: column; gap: 6px; }
+        .input-group label { font-weight: 600; font-size: 0.88rem; color: var(--primary-green); }
+
+        input, select, textarea {
+            width: 100%; padding: 0.8rem; border: 1px solid var(--border-color);
+            border-radius: 6px; font-size: 0.95rem; outline: none; transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+        }
+
+        .image-uploader-area {
+            margin: 1.2rem 0; background: #f8fafc; padding: 1.2rem;
+            border-radius: 8px; border: 1px dashed var(--accent-gold);
+        }
+
+        .upload-grid { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+
+        .upload-box {
+            width: 100px; height: 100px; background-color: #e2e8f0; border: 2px dashed #94a3b8;
+            border-radius: 8px; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease;
+        }
+
+        .upload-box:hover { border-color: var(--accent-gold); background-color: #cbd5e1; }
+        .upload-box i { font-size: 22px; color: #64748b; margin-bottom: 4px; }
+        .upload-box span { font-size: 0.72rem; color: #334155; font-weight: 600; }
+        .upload-box input[type="file"] { position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+
+        .img-preview-thumb { width: 100px; height: 100px; border-radius: 8px; object-fit: cover; border: 2px solid var(--accent-gold); }
+
+        .btn {
+            background-color: var(--accent-gold); color: var(--primary-green); padding: 0.8rem 1.8rem;
+            border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: all 0.3s ease;
+            font-size: 0.95rem; display: inline-flex; align-items: center; gap: 8px;
+        }
+
+        .btn:hover { background-color: var(--gold-hover); transform: translateY(-2px); }
+
+        .btn-danger {
+            background-color: var(--danger); color: white; padding: 0.4rem 0.8rem;
+            border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+        }
+
+        .table-card {
+            background: var(--white); border-radius: 12px; overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-green);
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+        th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: var(--primary-green); color: white; font-weight: 600; }
+        tr:hover { background-color: #f8fafc; }
+
+        .thumb-mini { width: 50px; height: 40px; border-radius: 4px; object-fit: cover; border: 1px solid #ccc; }
+
+        #adminAuthGate { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #040d09; z-index: 10000; display: flex; justify-content: center; align-items: center; 
+        }
+
+        footer {
+            background-color: var(--primary-green); color: white; text-align: center;
+            padding: 1.2rem; margin-top: auto; border-top: 3px solid var(--accent-gold); font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- AUTHENTICATION GATE -->
+    <div id="adminAuthGate">
+        <div class="card" style="width: 360px; text-align: center;">
+            <h3 style="color: var(--primary-green); justify-content: center;"><i class="fa-solid fa-user-shield"></i> Admin Portal Login</h3>
+            <form id="adminGateForm" onsubmit="handleAdminGateLogin(event)">
+                <div class="input-group" style="text-align: left; margin-bottom: 10px;">
+                    <label>Admin Email</label>
+                    <input type="email" id="gateEmail" required placeholder="admin@aaa-drives.com">
+                </div>
+                <div class="input-group" style="text-align: left; margin-bottom: 15px;">
+                    <label>Password</label>
+                    <input type="password" id="gatePass" required placeholder="••••••••">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Access Dashboard</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <h2><i class="fa-solid fa-user-gear"></i> Anyway Anywhere Anytime <span>Drivers Admin</span></h2>
+        <div>
+            <span id="loggedAdminEmail" style="color: var(--accent-gold); font-size: 0.88rem; font-weight: 600; margin-right: 15px;"></span>
+            <button onclick="adminLogout()" class="btn-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </header>
+
+    <!-- Navigation Bar for Admin Sections -->
+    <div class="admin-nav">
+        <button class="nav-tab active-tab" onclick="switchSection('requirements')">
+            <i class="fa-solid fa-bullhorn"></i> Current Requirements
+        </button>
+        <button class="nav-tab" onclick="switchSection('employees')">
+            <i class="fa-solid fa-users"></i> Available Employees / Drivers
+        </button>
+        <button class="nav-tab" onclick="switchSection('rentals')">
+            <i class="fa-solid fa-key"></i> Rental Cars Management
+        </button>
+        <button class="nav-tab" onclick="switchSection('salecars')">
+            <i class="fa-solid fa-car"></i> 2nd Hand Cars (Sale)
+        </button>
+        <button class="nav-tab" onclick="switchSection('offers')">
+            <i class="fa-solid fa-gift"></i> Special Offers & Discounts
+        </button>
+    </div>
+
+    <div class="container">
+
+        <!-- SECTION 0: CURRENT REQUIREMENTS SECTION -->
+        <div id="section-requirements" class="admin-section active-section">
+            <div class="card">
+                <h3><i class="fa-solid fa-pen-to-square"></i> Broadcast Current Requirement Note</h3>
+                <form onsubmit="addRequirement(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Requirement Title / Category</label>
+                            <input type="text" id="req-title" placeholder="e.g. Urgent Requirement: Night Driver for Luxury Sedan" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Location / Area</label>
+                            <input type="text" id="req-location" placeholder="e.g. South Mumbai / Thane" required>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 1.2rem;">
+                        <label>Detailed Note / Requirements Description</label>
+                        <textarea id="req-note" rows="3" placeholder="Enter complete requirements details to show across website..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-paper-plane"></i> Publish Requirement Note</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-green);"><i class="fa-solid fa-clipboard-list"></i> Active Current Requirements Broadcasted</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Description Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requirements-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 1: EMPLOYEES / DRIVERS MANAGEMENT -->
+        <div id="section-employees" class="admin-section">
+            <div class="card">
+                <h3><i class="fa-solid fa-user-plus"></i> Add Available Driver / Employee</h3>
+                <form onsubmit="addEmployee(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Employee / Driver Name</label>
+                            <input type="text" id="emp-name" placeholder="e.g. Ramesh Kumar" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" id="emp-phone" placeholder="e.g. 9876543210" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Experience</label>
+                            <input type="text" id="emp-exp" placeholder="e.g. 8+ Years Exp." required>
+                        </div>
+                        <div class="input-group">
+                            <label>Specialization / Skills</label>
+                            <select id="emp-type" required>
+                                <option value="Automatic & Manual Expert">Automatic & Manual Expert</option>
+                                <option value="Luxury Cars Specialist">Luxury Cars Specialist</option>
+                                <option value="Outstation Highway Driver">Outstation Highway Driver</option>
+                                <option value="Personal / Corporate Chauffeur">Personal / Corporate Chauffeur</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Current Status</label>
+                            <select id="emp-status" required>
+                                <option value="Available On Demand">Available On Demand</option>
+                                <option value="On Duty">On Duty</option>
+                                <option value="Outstation Trip">Outstation Trip</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 1.2rem;">
+                        <label>Driver Bio / Extra Description</label>
+                        <textarea id="emp-desc" rows="2" placeholder="e.g. Speaks English & Hindi, Police Verified, Willing for Outstation trips..."></textarea>
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-plus"></i> Add Employee to Live Roster</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-green);"><i class="fa-solid fa-list-check"></i> Active Drivers Roster</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Driver Name</th>
+                            <th>Contact Phone</th>
+                            <th>Experience</th>
+                            <th>Specialization</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employees-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 2: RENTAL CARS MANAGEMENT -->
+        <div id="section-rentals" class="admin-section">
+            <div class="card">
+                <h3><i class="fa-solid fa-key"></i> Add Rental Car Configuration</h3>
+                <form onsubmit="addRentalCar(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Car Name & Model</label>
+                            <input type="text" id="rent-title" placeholder="e.g. Innova Crysta 2.4 Z" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Rental Tariff (Rate / Day)</label>
+                            <input type="text" id="rent-price" placeholder="e.g. ₹ 4,500 / Day" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Car Type / Segment</label>
+                            <select id="rent-type" required>
+                                <option value="7 Seater MUV">7 Seater MUV</option>
+                                <option value="Executive Sedan">Executive Sedan</option>
+                                <option value="Luxury SUV">Luxury SUV</option>
+                                <option value="Hatchback">Hatchback</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Owner / Agency Details (Optional)</label>
+                            <input type="text" id="rent-owner" placeholder="e.g. Self Owned / Partner Car">
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>Rental Terms / Car Description</label>
+                        <textarea id="rent-desc" rows="2" placeholder="e.g. ₹5,000 Refundable Deposit, 300 KM limit per day, Fuel not included..."></textarea>
+                    </div>
+
+                    <div class="image-uploader-area">
+                        <label style="font-weight: 600; color: var(--primary-green);">Upload Rental Car Photos (Unlimited)</label>
+                        <div class="upload-grid" id="rent-image-container">
+                            <div class="upload-box" id="rent-box-1">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add Photo 1</span>
+                                <input type="file" accept="image/*" onchange="previewImages(event, 'rent', 1)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Deploy Rental Car to Website</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-green);"><i class="fa-solid fa-car-rear"></i> Active Rental Cars Inventory</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Car Name</th>
+                            <th>Type</th>
+                            <th>Daily Rate</th>
+                            <th>Description Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rentals-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 3: 2ND HAND CARS FOR SALE -->
+        <div id="section-salecars" class="admin-section">
+            <div class="card">
+                <h3><i class="fa-solid fa-car-side"></i> Add 2nd Hand Car for Sale</h3>
+                <form onsubmit="addSaleCar(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>KM Driven (Numbers Only)</label>
+                            <input type="number" id="sale-km" placeholder="e.g. 28000" required min="0">
+                        </div>
+                        <div class="input-group">
+                            <label>Car Model Name</label>
+                            <input type="text" id="sale-title" placeholder="e.g. Toyota Fortuner Legender 2021" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Price (₹)</label>
+                            <input type="text" id="sale-price" placeholder="e.g. ₹ 24,50,000" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Fuel Type</label>
+                            <select id="sale-fuel" required>
+                                <option value="Diesel">Diesel</option>
+                                <option value="Petrol">Petrol</option>
+                                <option value="CNG">CNG</option>
+                                <option value="Electric">Electric</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom: 1rem;">
+                        <label>Vehicle History & Full Specs Description</label>
+                        <textarea id="sale-desc" rows="2" placeholder="e.g. First Owner, Non-Accidental, Full Company Service History, Sunroof, Leather Seats..."></textarea>
+                    </div>
+
+                    <div class="image-uploader-area">
+                        <label style="font-weight: 600; color: var(--primary-green);">Upload Car Photos for Sale (Unlimited)</label>
+                        <div class="upload-grid" id="sale-image-container">
+                            <div class="upload-box" id="sale-box-1">
+                                <i class="fa-solid fa-plus"></i>
+                                <span>Add Photo 1</span>
+                                <input type="file" accept="image/*" onchange="previewImages(event, 'sale', 1)">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn"><i class="fa-solid fa-cloud-arrow-up"></i> Publish Used Car on Website</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-green);"><i class="fa-solid fa-tags"></i> Used Cars Listed for Sale</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>KM Driven</th>
+                            <th>Car Model</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salecars-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- SECTION 4: OFFERS MANAGEMENT -->
+        <div id="section-offers" class="admin-section">
+            <div class="card">
+                <h3><i class="fa-solid fa-bullhorn"></i> Publish Special Offer / Promotion</h3>
+                <form onsubmit="addOffer(event)">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Offer Code / Tag</label>
+                            <input type="text" id="offer-code" placeholder="e.g. FESTIVE2026 / SUNDAY10" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Offer Headline</label>
+                            <input type="text" id="offer-title" placeholder="e.g. 15% OFF on Outstation Drivers" required>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 1.2rem;">
+                        <label>Offer Description / Details</label>
+                        <textarea id="offer-desc" rows="2" placeholder="Enter terms or discount details..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn"><i class="fa-solid fa-gift"></i> Publish Offer to Customer Site</button>
+                </form>
+            </div>
+
+            <h3 style="margin-bottom: 1rem; color: var(--primary-green);"><i class="fa-solid fa-tags"></i> Active Special Offers</h3>
+            <div class="table-card">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Promo Code</th>
+                            <th>Offer Headline</th>
+                            <th>Details Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="offers-table"></tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Anyway Anywhere Anytime Drivers | Founder: Bilal Abdul Hamid Hamdare</p>
+    </footer>
+
+    <!-- FIREBASE DB & AUTH SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBpErNLGb_hVRuMfDnwMKvhYhEGyZWxugs",
+            authDomain: "aaa-drives.firebaseapp.com",
+            databaseURL: "https://aaa-drives-default-rtdb.firebaseio.com/",
+            projectId: "aaa-drives",
+            storageBucket: "aaa-drives.firebasestorage.app",
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        let rentalUploadedImages = [];
+        let saleUploadedImages = [];
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('adminAuthGate').style.display = 'none';
+                document.getElementById('loggedAdminEmail').innerText = "Signed in as: " + user.email;
+                loadRealtimeData();
+            } else {
+                document.getElementById('adminAuthGate').style.display = 'flex';
+            }
+        });
+
+        function handleAdminGateLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('gateEmail').value;
+            const pass = document.getElementById('gatePass').value;
+            auth.signInWithEmailAndPassword(email, pass).catch(err => alert("Login Failed: " + err.message));
+        }
+
+        function adminLogout() { auth.signOut(); }
+
+        function switchSection(secId) {
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.remove('active-section'));
+            document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active-tab'));
+
+            document.getElementById(`section-${secId}`).classList.add('active-section');
+            event.currentTarget.classList.add('active-tab');
+        }
+
+        function previewImages(event, type, index) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageSrc = e.target.result;
+                const container = document.getElementById(`${type}-image-container`);
+
+                if (type === 'rent') {
+                    rentalUploadedImages[index - 1] = imageSrc;
+                } else {
+                    saleUploadedImages[index - 1] = imageSrc;
+                }
+
+                const box = document.getElementById(`${type}-box-${index}`);
+                box.outerHTML = `<img src="${imageSrc}" class="img-preview-thumb" alt="Preview ${index}">`;
+
+                const nextIndex = index + 1;
+                if (!document.getElementById(`${type}-box-${nextIndex}`)) {
+                    const nextBox = document.createElement('div');
+                    nextBox.className = 'upload-box';
+                    nextBox.id = `${type}-box-${nextIndex}`;
+                    nextBox.innerHTML = `
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Photo ${nextIndex}</span>
+                        <input type="file" accept="image/*" onchange="previewImages(event, '${type}', ${nextIndex})">
+                    `;
+                    container.appendChild(nextBox);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // 0. Requirements Management
+        function addRequirement(e) {
+            e.preventDefault();
+            const newReq = {
+                title: document.getElementById('req-title').value,
+                location: document.getElementById('req-location').value,
+                note: document.getElementById('req-note').value,
+                createdAt: new Date().toISOString()
+            };
+
+            database.ref('requirements').push(newReq).then(() => {
+                alert("Current Requirement Note broadcasted successfully!");
+                e.target.reset();
+            }).catch(err => alert("Database Error: " + err.message));
+        }
+
+        function deleteRequirement(key) {
+            if (confirm("Remove this requirement broadcast?")) {
+                database.ref('requirements/' + key).remove();
+            }
+        }
+
+        // 1. Employee Management
+        function addEmployee(e) {
+            e.preventDefault();
+            const newEmp = {
+                name: document.getElementById('emp-name').value,
+                phone: document.getElementById('emp-phone').value,
+                exp: document.getElementById('emp-exp').value,
+                type: document.getElementById('emp-type').value,
+                status: document.getElementById('emp-status').value,
+                desc: document.getElementById('emp-desc').value || 'N/A',
+                createdAt: new Date().toISOString()
+            };
+
+            database.ref('staff_drivers').push(newEmp).then(() => {
+                alert("Employee successfully added to live driver roster!");
+                e.target.reset();
+            }).catch(err => alert("Database Error: " + err.message));
+        }
+
+        function deleteEmployee(key) {
+            if (confirm("Remove this driver/employee from roster?")) {
+                database.ref('staff_drivers/' + key).remove();
+            }
+        }
+
+        // 2. Rental Cars Management
+        function addRentalCar(e) {
+            e.preventDefault();
+            const newRental = {
+                title: document.getElementById('rent-title').value,
+                price: document.getElementById('rent-price').value,
+                type: document.getElementById('rent-type').value,
+                owner: document.getElementById('rent-owner').value || 'Agency Car',
+                desc: document.getElementById('rent-desc').value || 'N/A',
+                img: rentalUploadedImages.length > 0 ? rentalUploadedImages[0] : 'https://images.unsplash.com/photo-1590362891991-f776e747a588?auto=format&fit=crop&w=500&q=80',
+                gallery: rentalUploadedImages,
+                createdAt: new Date().toISOString()
+            };
+
+            database.ref('staff_rental_cars').push(newRental).then(() => {
+                alert("Rental Car successfully published to customer website!");
+                e.target.reset();
+                rentalUploadedImages = [];
+                document.getElementById('rent-image-container').innerHTML = `
+                    <div class="upload-box" id="rent-box-1">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Photo 1</span>
+                        <input type="file" accept="image/*" onchange="previewImages(event, 'rent', 1)">
+                    </div>`;
+            }).catch(err => alert("Database Error: " + err.message));
+        }
+
+        function deleteRentalCar(key) {
+            if (confirm("Delete this rental car from website?")) {
+                database.ref('staff_rental_cars/' + key).remove();
+            }
+        }
+
+        // 3. Sale Cars Management
+        function addSaleCar(e) {
+            e.preventDefault();
+            const kmValue = document.getElementById('sale-km').value;
+            const formattedKm = Number(kmValue).toLocaleString('en-IN') + ' KM';
+
+            const newSaleCar = {
+                title: document.getElementById('sale-title').value,
+                price: document.getElementById('sale-price').value,
+                km: formattedKm,
+                fuel: document.getElementById('sale-fuel').value,
+                desc: document.getElementById('sale-desc').value || 'N/A',
+                img: saleUploadedImages.length > 0 ? saleUploadedImages[0] : 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=500&q=80',
+                gallery: saleUploadedImages,
+                createdAt: new Date().toISOString()
+            };
+
+            database.ref('staff_sale_cars').push(newSaleCar).then(() => {
+                alert("2nd Hand Car successfully published on customer website!");
+                e.target.reset();
+                saleUploadedImages = [];
+                document.getElementById('sale-image-container').innerHTML = `
+                    <div class="upload-box" id="sale-box-1">
+                        <i class="fa-solid fa-plus"></i>
+                        <span>Add Photo 1</span>
+                        <input type="file" accept="image/*" onchange="previewImages(event, 'sale', 1)">
+                    </div>`;
+            }).catch(err => alert("Database Error: " + err.message));
+        }
+
+        function deleteSaleCar(key) {
+            if (confirm("Delete this used car from website?")) {
+                database.ref('staff_sale_cars/' + key).remove();
+            }
+        }
+
+        // 4. Special Offers Management
+        function addOffer(e) {
+            e.preventDefault();
+            const newOffer = {
+                code: document.getElementById('offer-code').value.toUpperCase(),
+                title: document.getElementById('offer-title').value,
+                desc: document.getElementById('offer-desc').value,
+                createdAt: new Date().toISOString()
+            };
+
+            database.ref('staff_offers').push(newOffer).then(() => {
+                alert("Offer successfully published to website!");
+                e.target.reset();
+            }).catch(err => alert("Database Error: " + err.message));
+        }
+
+        function deleteOffer(key) {
+            if (confirm("Remove this offer from website?")) {
+                database.ref('staff_offers/' + key).remove();
+            }
+        }
+
+        // Realtime Firebase Fetching
+        function loadRealtimeData() {
+            // Requirements Sync
+            database.ref('requirements').on('value', snapshot => {
+                const tbody = document.getElementById('requirements-table');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#6b7280;">No requirement notes active.</td></tr>`;
+                    return;
+                }
+                Object.keys(data).forEach(key => {
+                    const r = data[key];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${r.title}</strong></td>
+                            <td>${r.location}</td>
+                            <td>${r.note}</td>
+                            <td><button class="btn-danger" onclick="deleteRequirement('${key}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Employees Sync
+            database.ref('staff_drivers').on('value', snapshot => {
+                const tbody = document.getElementById('employees-table');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#6b7280;">No employees or drivers added yet.</td></tr>`;
+                    return;
+                }
+                Object.keys(data).forEach(key => {
+                    const d = data[key];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong>${d.name}</strong></td>
+                            <td><a href="tel:${d.phone}" style="color:var(--primary-green); font-weight:600;">${d.phone}</a></td>
+                            <td>${d.exp}</td>
+                            <td>${d.type}</td>
+                            <td>${d.desc || 'N/A'}</td>
+                            <td><span class="badge-status">${d.status}</span></td>
+                            <td><button class="btn-danger" onclick="deleteEmployee('${key}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Rentals Sync
+            database.ref('staff_rental_cars').on('value', snapshot => {
+                const tbody = document.getElementById('rentals-table');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#6b7280;">No rental cars listed yet.</td></tr>`;
+                    return;
+                }
+                Object.keys(data).forEach(key => {
+                    const r = data[key];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><img src="${r.img}" class="thumb-mini" alt="Car"></td>
+                            <td><strong>${r.title}</strong></td>
+                            <td>${r.type}</td>
+                            <td><strong style="color:var(--primary-green);">${r.price}</strong></td>
+                            <td>${r.desc || 'N/A'}</td>
+                            <td><button class="btn-danger" onclick="deleteRentalCar('${key}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Sale Cars Sync
+            database.ref('staff_sale_cars').on('value', snapshot => {
+                const tbody = document.getElementById('salecars-table');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#6b7280;">No used cars listed yet.</td></tr>`;
+                    return;
+                }
+                Object.keys(data).forEach(key => {
+                    const s = data[key];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><img src="${s.img}" class="thumb-mini" alt="Car"></td>
+                            <td><strong style="color:var(--primary-green);">${s.km}</strong></td>
+                            <td>${s.title}</td>
+                            <td><strong style="color:#b45309;">${s.price}</strong></td>
+                            <td>${s.desc || 'N/A'}</td>
+                            <td><button class="btn-danger" onclick="deleteSaleCar('${key}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>
+                    `;
+                });
+            });
+
+            // Offers Sync
+            database.ref('staff_offers').on('value', snapshot => {
+                const tbody = document.getElementById('offers-table');
+                tbody.innerHTML = '';
+                const data = snapshot.val();
+                if (!data) {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#6b7280;">No special offers active.</td></tr>`;
+                    return;
+                }
+                Object.keys(data).forEach(key => {
+                    const o = data[key];
+                    tbody.innerHTML += `
+                        <tr>
+                            <td><strong style="color:var(--accent-gold); background:var(--primary-green); padding:2px 6px; border-radius:4px;">${o.code}</strong></td>
+                            <td><strong>${o.title}</strong></td>
+                            <td>${o.desc}</td>
+                            <td><button class="btn-danger" onclick="deleteOffer('${key}')"><i class="fa-solid fa-trash"></i> Delete</button></td>
+                        </tr>
+                    `;
+                });
+            });
+        }
+    </script>
+</body>
+</html>
